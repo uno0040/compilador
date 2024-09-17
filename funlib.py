@@ -1,9 +1,6 @@
-class InvalidCommentExcpetion(Exception):
-    pass
-
 def read_file(file_path:str) -> list:
     """
-    Abre e varre todo o arquivo.
+    Abre e varre todo o arquivo. Devolve uma lista com todos todas as linhas, sendo lines[n] a n-ésima linha do arquivo lido.
     """
     try:
         file = open(file_path, 'r') # abre o arquivo
@@ -19,14 +16,15 @@ def read_file(file_path:str) -> list:
 
 def mount_tokens(lines:list) -> list:
     """
-    Escaneia a lista de strings inserida e separa em tokens, função não finalizada
+    Escaneia a lista de strings inserida e separa em tokens, função não finalizada.\n
+    O jeito que ele trata comentarios é ignorar todos os caracteres até achar outra chave.
     """
     token_list = []
     numOfComments = 0
     for line in lines:
         token = '' # token atual sendo lido 
-        for char in line:
-            if char == "}":
+        for char in line: 
+            if char == "}": # se for o fim do comentario
                 numOfComments-=1
                 if numOfComments < 0:
                     numOfComments = 0
@@ -35,7 +33,7 @@ def mount_tokens(lines:list) -> list:
                     token_list.append(token)
                     token = ''
                 else:
-                    pass
+                    continue
             elif char != "{" and char != "}" and char != " " and numOfComments == 0:
                 token+=char
             elif char == "{":
