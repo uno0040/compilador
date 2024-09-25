@@ -4,7 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
-
+#include "tokens.hpp"
 
 using namespace std;
 
@@ -144,10 +144,10 @@ unordered_map<string,string> tokenList = {
 };
 
 // struct que define as informações de um token
-struct Token {
-    string lexema; 
-    string simbolo; 
-};
+// struct Token {
+//     string lexema; 
+//     string simbolo; 
+// };
 
 // O analisador lexical vai ser responsavel por retornar todos os tokens que um arquivo fonte possui
 vector<Token> analisadorLexical(const string& filename){
@@ -240,13 +240,14 @@ vector<Token> analisadorLexical(const string& filename){
             // trata atribuição
             string tokenValue(1,c);
             char next;
-
-            while (file >> noskipws >> c && (c == '=')){
-                tokenValue+= c;
+            int fl = 0;
+            file.get(next);
+            if (next != '='){
+                file.unget();
             }
-
-            file.unget(); //devolve caracter
-
+            else {
+                tokenValue+=next;
+            }
             if (tokenList.find(tokenValue) != tokenList.end()){
                 token_count[tokenInd[tokenList[tokenValue]]]++;
                 tokens.push_back({tokenValue,tokenList[tokenValue]});
@@ -331,10 +332,11 @@ int main() {
 
     // string filename = "abc.txt";
     // printFileContent(filename);
-
+    writeTokensToFile("test.txt",tokens);
     for (const auto& tok : tokens) {
-        outfile << "Token Type: " << tok.lexema << ", Value: " << tok.simbolo << endl;
-        cout << "Token Type: " << tok.lexema << ", Value: " << tok.simbolo << endl;
+        // outfile << "Token Type: " << tok.lexema << " , Value: " << tok.simbolo << endl;
+        
+        cout << "Token Type: " << tok.lexema << " , Value: " << tok.simbolo << endl;
     }
     cout << endl;
     for (int i = 0; i < 39; i++) {
