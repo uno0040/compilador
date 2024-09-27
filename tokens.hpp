@@ -10,5 +10,6 @@ struct Token {
 };
 
 void writeTokensToFile(const std::string& filename, std::vector<Token> tokens);
+// std::vector<std::string> analisadorLexical(std::ifstream &file);
 
 #endif
