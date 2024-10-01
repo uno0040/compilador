@@ -4,12 +4,11 @@
 #include <string>
 #include <vector>
 
-// struct Token {
-//     std::string lexema; 
-//     std::string simbolo; 
-// };
+using namespace std;
+
+
 
 // void writeTokensToFile(const std::string& filename, std::vector<Token> tokens);
-std::vector<std::string> analisadorLexical(std::ifstream &file);
+Token analisadorLexical(ifstream &file);
 
 #endif

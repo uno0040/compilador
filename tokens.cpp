@@ -1,30 +1,42 @@
-// tokens.cpp
 #include "tokens.hpp"
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 
+using namespace std;
 
-// Definição da função
-void writeTokensToFile(const std::string& filename, std::vector<Token> tokens) {
-    std::ofstream file(filename);
+// -------------------- 
+//  lista de tokens 
+//    A lista de tokens vai possuir o formato : Lexema Simbolo
+// --------------------
+
+// Supondo que a estrutura Token esteja definida em tokens.hpp
+// struct Token {
+//     string lexema;
+//     string simbolo;
+// };
+
+void writeTokensToFile(const string& filename, const Token& token) {
+    ofstream file(filename);
 
     if (!file.is_open()) {
-        std::cerr << "Erro ao abrir o arquivo." << std::endl;
+        cerr << "Erro ao abrir o arquivo." << endl;
         return;
     }
 
+    // Definimos o tamanho de largura em caracteres 
     int tokenWidth = 20;
     int valueWidth = 25;
 
-    file << std::left << std::setw(tokenWidth) << "Token Type"
-         << std::setw(valueWidth) << "Value" << std::endl;
-    file << std::string(tokenWidth + valueWidth, '-') << std::endl;
+    // Escreve o cabeçalho 
+    file << left << setw(tokenWidth) << "Lexema" << setw(valueWidth) << "Simbolo" << endl;
 
-    for (const auto& tok : tokens) {
-        file << std::left << std::setw(tokenWidth) << tok.lexema
-             << std::setw(valueWidth) << tok.simbolo << std::endl;
-    }
+    // Linha de separação
+    file << string(tokenWidth + valueWidth, '-') << endl;
+
+    // Escrevemos o token no arquivo 
+    file << left << setw(tokenWidth) << token.lexema
+         << setw(valueWidth) << token.simbolo << endl;
 
     file.close();
 }
