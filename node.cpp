@@ -1,88 +1,74 @@
 #include <iostream>
 #include <string>
+#include "sintatico.hpp"
 
 using namespace std;
 
-class Node {
-public:
-    // Data part of the node
-    string data;
-    string tipo;
-    int escopo;
-    int memoria;
-    // Pointer to the next node in the list
-    Node* next;
+// Implementação do construtor da classe Node
+Node::Node(string data, string tipo, int escopo, int memoria)
+{
+    this->data = data;
+    this->tipo = tipo;
+    this->escopo = escopo;
+    this->memoria = memoria;
+    this->next = nullptr;
+}
 
-    // Constructor to initialize the node with data
-    Node(string data,string tipo = "", int escopo = NULL,int memoria = NULL)
-    {
-        this->data = data;
-        this->tipo = tipo;
-        this->escopo = escopo;
-        this->memoria = memoria;
-        this->next = NULL;
+// Implementação do construtor da classe TabelaDeSimbolos
+TabelaDeSimbolos::TabelaDeSimbolos() {
+    head = nullptr; // Inicializa a cabeça como nullptr
+}
+
+// Implementação da função insertAtHead
+void TabelaDeSimbolos::insertAtHead(string data, string tipo, int escopo, int memoria) {
+    Node* newNode = new Node(data, tipo, escopo, memoria);
+    
+    if (head == nullptr) {
+        head = newNode;
+        return;
     }
-};
-class TabelaDeSimbolos {
-    Node *head;
-    public:
-        TabelaDeSimbolos() // quando chamada define a head como null
-        {
-            head = NULL;
-        }
-        /**
-         * @brief Insere um identificador no topo da pilha
-         * 
-         * @param data 
-         * @param tipo Opcional senão ""
-         * @param escopo Opcional senão -1
-         * @param memoria Opcional senão -1
-         */
-        void insertAtHead(string data,string tipo = "", int escopo = NULL,int memoria = NULL) {
-            
-            Node *newNode = new Node(data,tipo,escopo,memoria);
-            // se head nao exisir
-            if (head == NULL) {
-                head = newNode;
-                return;
-            }
-            // criamos novo node, o mesmo sera o novo head, e o antigo head sera o proximo
-            newNode->next = this->head;
-            this->head = newNode;
-        }
-        /**
-         * @brief Busca pelo identificador na pilha, se não for encontrado ele retorna NULL.
-         * 
-         * @param data 
-         */
-        Node* searchFor(string data) {
-            Node *temp = head;
-            // sociedade
-            if (head == NULL) {
-                return NULL;
-            }
-            // enquanto não for o node alvo
-            while (temp != NULL) {
-                if (temp->data == data)
-                    return temp;
-            }
-            return NULL;
-        }
-        /**
-         * @brief Altera o campo tipo de todas as variaveis com o nome passado.
-         * 
-         * @param tipo 
-         * @param var
-         */
-        void setVarTypes(string tipo,string var) {
-            Node *temp = head;
-            if (head == NULL)
-                return;
-            
-            while (temp != NULL) {
-                if (temp->data == var)
-                    temp->tipo = tipo;
-            }
-            return;
-        }
-};
+
+    newNode->next = head;
+    head = newNode;
+}
+
+// Implementação da função searchFor
+Node* TabelaDeSimbolos::searchFor(string data) {
+    Node* temp = head;
+
+    while (temp != nullptr) {
+        if (temp->data == data)
+            return temp;
+        temp = temp->next;
+    }
+
+    return nullptr; // Retorna nullptr se não for encontrado
+}
+
+// Implementação da função setVarTypes
+void TabelaDeSimbolos::setVarTypes(string tipo, string var) {
+    Node* temp = head;
+
+    while (temp != nullptr) {
+        if (temp->data == var)
+            temp->tipo = tipo;
+        temp = temp->next;
+    }
+}
+
+// Implementação da função display
+void TabelaDeSimbolos::display() {
+    Node* temp = head;
+    int tam = 0;
+    if (head == nullptr) {
+        cout << "Tabela vazia." << endl;
+        return;
+    }
+
+    while (temp != nullptr) {
+        cout << "Identificador: " << temp->data << ", Tipo: " << temp->tipo << endl;
+        temp = temp->next;
+        tam++;
+    }
+    cout << tam << " itens na tabela de simbolos." << endl;
+}

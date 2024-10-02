@@ -1,28 +1,36 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include "tokens.hpp"
+#include "lexical.hpp"
+#include "sintatico.hpp"
 
-std::string lerProximaPalavra(std::ifstream &arquivo) {
-    std::string palavra;
-    if (arquivo >> palavra) {
-        return palavra;
-    } else {
-        return ""; // Retorna uma string vazia se não houver mais palavras
-    }
-}
+using namespace std;
 
 int main() {
-    std::ifstream arquivo("oi.txt"); // Abra o arquivo para leitura
-    if (!arquivo.is_open()) {
-        std::cerr << "Erro ao abrir o arquivo!" << std::endl;
+    
+    string filename = "oi.txt";
+    ifstream Codigo_fonte(filename);
+    
+
+    // Erro de abertura de arquivo 
+    if (!Codigo_fonte.is_open()) {
+        cerr << "Erro ao abrir o arquivo!" << endl;
         return 1;
     }
-
-    std::string palavra;
-    while (!(palavra = lerProximaPalavra(arquivo)).empty()) {
-        std::cout << "Palavra lida: " << palavra << std::endl;
+    TabelaDeSimbolos table;
+    Token inicio;
+    int cont = 0;
+    // Compilando o codigo fonte 
+    while (!Codigo_fonte.eof()) {
+        cont++;
+        inicio = analisadorLexical(Codigo_fonte,table); 
+        // analisadorSintatico(inicio)
+        // table.display();
     }
-
-    arquivo.close(); // Feche o arquivo após terminar a leitura
+    cout << cont << " itens analisados :P" << endl;
     return 0;
 }

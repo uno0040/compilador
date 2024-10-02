@@ -6,6 +6,7 @@
 #include <unordered_set>
 #include "tokens.hpp"
 #include "lexical.hpp"
+#include "sintatico.hpp"
 
 using namespace std;
 
@@ -155,7 +156,7 @@ Token escreveToken_no_arquivo_lista_de_tokens(string tokenlexema, string tokensi
 }
 
 // O analisador lexical vai ser responsavel por retornar todos os tokens que um arquivo fonte possui
-Token analisadorLexical(ifstream &file)
+Token analisadorLexical(ifstream &file, TabelaDeSimbolos& table)
 {
 
     char c;
@@ -188,12 +189,14 @@ Token analisadorLexical(ifstream &file)
             if (tokenList.find(tokenValue) != tokenList.end())
             {
                 token_count[tokenInd[tokenList[tokenValue]]]++;
+                table.insertAtHead(tokenValue,tokenList[tokenValue]);
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, tokenList[tokenValue],linha);
             }
             else
             {
                 // É um identificador :D
                 token_count[tokenInd[tokenList["identificador"]]]++;
+                table.insertAtHead(tokenValue,tokenList["identificador"]);
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, tokenList["identificador"],linha);
             }
         }
@@ -210,7 +213,7 @@ Token analisadorLexical(ifstream &file)
 
             file.unget();
             token_count[tokenInd["snumero"]]++;
-
+            table.insertAtHead(tokenValue,"snumero");
             return escreveToken_no_arquivo_lista_de_tokens(tokenValue, "snumero",linha);
         }
         else if (c == ':')
@@ -233,12 +236,12 @@ Token analisadorLexical(ifstream &file)
             if (tokenList.find(tokenValue) != tokenList.end())
             {
                 token_count[tokenInd[tokenList[tokenValue]]]++;
-
+                table.insertAtHead(tokenValue,tokenList[tokenValue]);
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, tokenList[tokenValue],linha);
             }
             else
             {
-
+                table.insertAtHead(tokenValue,"serro");
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, "serro",linha);
             }
         }
@@ -250,12 +253,12 @@ Token analisadorLexical(ifstream &file)
             if (tokenList.find(tokenValue) != tokenList.end())
             {
                 token_count[tokenInd[tokenList[tokenValue]]]++;
-
+                table.insertAtHead(tokenValue,tokenList[tokenValue]);
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, tokenList[tokenValue],linha);
             }
             else
             {
-
+                table.insertAtHead(tokenValue,"serro");
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, "serro",linha);
             }
         }
@@ -276,11 +279,12 @@ Token analisadorLexical(ifstream &file)
             {
 
                 token_count[tokenInd[tokenList[tokenValue]]]++;
+                table.insertAtHead(tokenValue,tokenList[tokenValue]);
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, tokenList[tokenValue],linha);
             }
             else
             {
-
+                table.insertAtHead(tokenValue,"serro");
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, "serro",linha);
             }
         }
@@ -294,16 +298,19 @@ Token analisadorLexical(ifstream &file)
             {
 
                 token_count[tokenInd[tokenList[tokenValue]]]++;
+                table.insertAtHead(tokenValue,tokenList[tokenValue]);
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, tokenList[tokenValue],linha);
             }
             else
             {
+                table.insertAtHead(tokenValue,"serro");
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, "serro",linha);
             }
         }
         else
         {
             string tokenValue(1, c);
+            table.insertAtHead(tokenValue,"serro");
             return escreveToken_no_arquivo_lista_de_tokens(tokenValue, "serro",linha);
         }
         linha++;
