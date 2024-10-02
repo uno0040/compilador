@@ -6,25 +6,31 @@
 #include <unordered_set>
 #include "tokens.hpp"
 #include "lexical.hpp"
+// #include "sintatico.hpp"
 
 using namespace std;
 
 int main() {
+    
     string filename = "oi.txt";
-    ifstream arquivo(filename);
-    int c = 0;
-    if (!arquivo.is_open()) {
-        std::cerr << "Erro ao abrir o arquivo!" << std::endl;
+    ifstream Codigo_fonte(filename);
+    
+
+    // Erro de abertura de arquivo 
+    if (!Codigo_fonte.is_open()) {
+        cerr << "Erro ao abrir o arquivo!" << endl;
         return 1;
     }
-    vector<string> teste;
-    vector<string> res;
-    while (!arquivo.eof()) {
-        teste = analisadorLexical(arquivo);
-        res.push_back(teste[0]);
-        res.push_back(teste[1]);
-        cout << res[c] << " " << res[c+1] << endl;
-        c = c + 2;
+
+    Token inicio;
+    // Compilando o codigo fonte 
+    while (!Codigo_fonte.eof()) {
+        
+
+        inicio = analisadorLexical(Codigo_fonte); 
+        // analisadorSintatico(inicio)
+
+        
     }
 
     return 0;
