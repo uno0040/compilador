@@ -1,1 +1,1 @@
-Compilador simples escrito em python.
+Compilador simples escrito em c++.
