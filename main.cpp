@@ -14,7 +14,7 @@ int main() {
     
     string filename = "oi.txt";
     ifstream Codigo_fonte(filename);
-    
+    int linha = 1;
 
     // Erro de abertura de arquivo 
     if (!Codigo_fonte.is_open()) {
@@ -24,13 +24,13 @@ int main() {
     TabelaDeSimbolos table;
     Token inicio;
     // Compilando o codigo fonte 
-    while (!Codigo_fonte.eof()) {
+    // while (!Codigo_fonte.eof()) {
         
 
-        inicio = analisadorLexical(Codigo_fonte,table); 
-        // analisadorSintatico(inicio)
+        // inicio = analisadorLexical(Codigo_fonte,table); 
+    analisadorSintatico(Codigo_fonte,table);
         
-    }
+    // }
     table.display();
     return 0;
 }

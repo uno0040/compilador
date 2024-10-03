@@ -5,12 +5,13 @@
 using namespace std;
 
 // Implementação do construtor da classe Node
-Node::Node(string data, string tipo, int escopo, int memoria)
+Node::Node(string data, string tipo, int escopo, int memoria, int linha)
 {
     this->data = data;
     this->tipo = tipo;
     this->escopo = escopo;
     this->memoria = memoria;
+    this->linha = linha;
     this->next = nullptr;
 }
 
@@ -20,8 +21,8 @@ TabelaDeSimbolos::TabelaDeSimbolos() {
 }
 
 // Implementação da função insertAtHead
-void TabelaDeSimbolos::insertAtHead(string data, string tipo, int escopo, int memoria) {
-    Node* newNode = new Node(data, tipo, escopo, memoria);
+void TabelaDeSimbolos::insertAtHead(string data, string tipo, int escopo, int memoria, int linha) {
+    Node* newNode = new Node(data, tipo, escopo, memoria, linha);
     
     if (head == nullptr) {
         head = newNode;
@@ -30,6 +31,17 @@ void TabelaDeSimbolos::insertAtHead(string data, string tipo, int escopo, int me
 
     newNode->next = head;
     head = newNode;
+}
+
+bool TabelaDeSimbolos::buscar(string data) {
+    Node* temp = head;
+    while (temp != nullptr) {
+        if (temp->data == data)
+            return true;
+        temp = temp->next;
+    }
+
+    return false; // Retorna nullptr se não for encontrado
 }
 
 // Implementação da função searchFor
@@ -72,3 +84,13 @@ void TabelaDeSimbolos::display() {
     }
     cout << tam << " itens na tabela de simbolos." << endl;
 }
+/// @brief Retira o item no topo da Tabela de Simbolos
+/// @return Node
+Node* TabelaDeSimbolos::pop() {
+    if (head == nullptr) {
+        return nullptr;
+    }
+    Node* temp = head;
+    head = head->next;
+    return temp;
+}   
