@@ -5,13 +5,14 @@
 using namespace std;
 
 // Implementação do construtor da classe Node
-Node::Node(string data, string tipo, int escopo, int memoria, int linha)
+Node::Node(string data, string tipo, int escopo, int memoria,int linha)
 {
     this->data = data;
     this->tipo = tipo;
     this->escopo = escopo;
     this->memoria = memoria;
     this->linha = linha;
+    validade = true;
     this->next = nullptr;
 }
 

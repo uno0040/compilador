@@ -17,6 +17,7 @@ public:
     int escopo;
     int memoria;
     int linha;
+    bool validade;
     // Ponteiro para o próximo nó
     Node* next;
 
