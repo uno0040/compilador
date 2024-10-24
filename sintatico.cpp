@@ -52,6 +52,7 @@ void Analisa_et_variaveis(Token &token, ifstream &codigo_fonte, string &lista_er
         else
         {
             // Erro espera-se identificador <etapa de declaração de variaveis>
+            // cout << "analisa_et_variaveis" << endl;
             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         }
     }
@@ -110,6 +111,7 @@ void AnalisaVariaveis(Token &token, ifstream &codigo_fonte, string &lista_erros,
 
                         if (token.simbolo == "sdoispontos") {
                             // Erro encontrou um dois pontos aos inves de um identificador <analisa_variaveis>
+                            cout << "AnalisaVariaveis" << endl;
                             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
                         }
 
@@ -122,6 +124,7 @@ void AnalisaVariaveis(Token &token, ifstream &codigo_fonte, string &lista_erros,
             
         } else {
             // Erro de esperar um identificador <analisa_variaveis>
+            cout << "AnalisaVariaveis 2" << endl;
             writeErrors(token.linha, codigo_fonte, lista_erros,erroIdentificador);
         }
     } while (token.simbolo != "sdoispontos");
@@ -151,6 +154,7 @@ void Analisa_declaracao_procedimento(Token &token, ifstream &codigo_fonte, strin
     else
     {
         // ERRO NAO TEM IDENTIFICADOR
+        cout << "Analisa_declaracao_procedimento" << endl;
         writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         // RETIRAR O GALHO DA TABELA DE SIMBOLOS
     }
@@ -179,6 +183,7 @@ void Analisa_declaracao_funcao(Token &token, ifstream &codigo_fonte, string &lis
         }
     }
     else {
+        cout << "Analisa_declaracao_funcao" << endl;
         writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
     }
 }
@@ -207,22 +212,25 @@ void Analisa_atribuicao(Token &token, ifstream &codigo_fonte, string &lista_erro
     cout << "ANALISA_ATRIBUICAO" << endl;
     token = analisadorLexical(codigo_fonte,table);
     Analisa_expressao(token, codigo_fonte, lista_erros,table);
+    cout << "ANALISA_ATRIBUICAO CABOUUU" << endl;
 }
 
-void Chamada_procedimento(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table)
+void Chamada_procedimento(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table, Token token_passado)
 {
     // cout << "bem vindo ao Chamada_procedimento!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    token = analisadorLexical(codigo_fonte,table);
-    if (token.simbolo == "sidentificador")
+    // token = analisadorLexical(codigo_fonte,table);
+    cout << "#[" << token_passado.lexema << "]#" <<endl;
+    if (token_passado.simbolo == "sidentificador")
     {
 
-        token = analisadorLexical(codigo_fonte,table);
 
-        Analisa_identificador(token, codigo_fonte, lista_erros,table);
+        Analisa_identificador(token_passado, codigo_fonte, lista_erros,table);
+        // token = analisadorLexical(codigo_fonte,table);
     }
     else
     {
         // Erro identificador não encontrado <chamada de procedimento>
+        cout << "Chamada_procedimento" << endl;
         writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
     }
 }
@@ -263,6 +271,7 @@ void Analisa_chamada_funcao(Token &token, ifstream &codigo_fonte, string &lista_
     else
     {
         // ERRO NAO TEM IDENTIFICADOR
+        cout << "Analisa_chamada_funcao" << endl;
         writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         // RETIRAR O GALHO DA TABELA DE SIMBOLOS
     }
@@ -271,7 +280,7 @@ void Analisa_chamada_funcao(Token &token, ifstream &codigo_fonte, string &lista_
 void Analisa_fator(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table)
 {
     // cout << "bem vindo ao Analisa_fator" << endl;
-    cout << token.lexema << " " << token.simbolo << " no Analisa_fator" << endl;
+    // cout << token.lexema << " " << token.simbolo << " no Analisa_fator" << endl;
     // token = analisadorLexical(codigo_fonte,table);
     if (token.simbolo == "sidentificador")
     {
@@ -338,13 +347,13 @@ void Analisa_fator(Token &token, ifstream &codigo_fonte, string &lista_erros, Ta
 void Analisa_termo(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table)
 {
     // cout << "bem vindo ao Analisa_termo" << endl;
-    cout << "de fora do while do analisa_termo" << endl;
+    // cout << "de fora do while do analisa_termo" << endl;
     Analisa_fator(token, codigo_fonte, lista_erros,table);
     
     while ((token.simbolo == "smult") || (token.simbolo == "sdiv") || (token.simbolo == "se"))
     {
         token = analisadorLexical(codigo_fonte,table);
-        cout << "de dentro do while do analisa_termo" << endl;
+        // cout << "de dentro do while do analisa_termo" << endl;
         Analisa_fator(token, codigo_fonte, lista_erros,table);
 
     } 
@@ -359,12 +368,12 @@ void Analisa_expressao_simples(Token &token, ifstream &codigo_fonte, string &lis
     }
     Analisa_termo(token, codigo_fonte, lista_erros,table);
 
-    do
+    while ((token.simbolo == "smais") || (token.simbolo == "smenos") || (token.simbolo == "sou"))
     {
         token = analisadorLexical(codigo_fonte,table);
         Analisa_termo(token, codigo_fonte, lista_erros,table);
 
-    } while ((token.simbolo == "smais") || (token.simbolo == "smenos") || (token.simbolo == "sou"));
+    } 
     
 }
 
@@ -400,18 +409,16 @@ void Analisa_chamada_procedimento(Token &token, ifstream &codigo_fonte, string &
 void Analisa_atrib_chprocedimento(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table)
 {
     // cout << "bem vindo ao Analisa_atrib_chprocedimento" << endl;
-    token = analisadorLexical(codigo_fonte,table);
+    Token token_passado = token;
+    token = analisadorLexical(codigo_fonte,table); 
     // <stribuiçao_chprocedimento> ::= (<comando atribuicao> | <chamada de procedimento>)
     if (token.simbolo == "satribuicao")
     {
-
-        // <comando atribuiçao> ::= <identificdor> := <expressao>
-        // cout << "FUI CHAMADAAAAAAA" <<endl;
         Analisa_atribuicao(token, codigo_fonte, lista_erros,table);
     }
     else
     {
-        Chamada_procedimento(token, codigo_fonte, lista_erros,table);
+        Chamada_procedimento(token, codigo_fonte, lista_erros,table, token_passado);
     }
 }
 
@@ -458,39 +465,6 @@ void Analisa_se(Token &token, ifstream &codigo_fonte, string &lista_erros, Tabel
 
 void Analisa_leia(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table)
 {
-    // token = analisadorLexical(codigo_fonte,table);
-    // if (token.simbolo == "sabre_parenteses")
-    // {
-    //     token = analisadorLexical(codigo_fonte,table);
-    //     if (token.simbolo == "sidentificador")
-    //     {
-    //         // Pesquisa na tabela
-    //         bool existe = true;
-    //         // Se o identificado existe na tabela safe
-    //         if (existe)
-    //         {
-    //             token = analisadorLexical(codigo_fonte,table);
-
-    //             if (token.simbolo == "sfecha_parenteses")
-    //             {
-    //                 token = analisadorLexical(codigo_fonte,table);
-    //             }
-    //             else
-    //             {
-    //                 // Erro de fechamento de parenteses <comando leitura>
-    //                 writeErrors(token.linha, codigo_fonte, lista_erros, erroFechamentoDeParenteses);
-    //             }
-    //         }
-    //         else
-    //         {
-    //             // Erro identificador não existe <comando leitura>
-    //             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificadorNaoExiste);
-    //         }
-    //     }
-    // }
-    // else {
-    //     writeErrors(token.linha, codigo_fonte, lista_erros, erroFechamentoDeParenteses);
-    // }
     // cout << "bem vindo ao Analisa_leia" << endl;
     token = analisadorLexical(codigo_fonte,table);
     if (token.simbolo == "sabre_parenteses") {
@@ -556,6 +530,7 @@ void Analisa_escreva(Token &token, ifstream &codigo_fonte, string &lista_erros, 
         }
         else
         {
+            cout << "Analisa_escreva" << endl;
             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         }
     }

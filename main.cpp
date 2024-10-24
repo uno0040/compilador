@@ -31,6 +31,6 @@ int main() {
     analisadorSintatico(Codigo_fonte,table);
         
     // }
-    table.display();
+    // table.display();
     return 0;
 }
