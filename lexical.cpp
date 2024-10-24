@@ -164,6 +164,11 @@ Token analisadorLexical(ifstream &file, TabelaDeSimbolos& table)
 
     while (file >> noskipws >> c)
     {
+        if (file.eof())
+        {
+            // Se chegou ao final do arquivo, retorne um token vazio ou uma ação adequada
+            return Token(); // Ou você pode lançar um erro, se preferir
+        }
         if (c == '{')
         {
             while (file >> noskipws >> c && c != '}');

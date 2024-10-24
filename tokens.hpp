@@ -13,6 +13,9 @@ struct Token {
     string lexema; 
     string simbolo; 
     int linha;
+    bool isEmpty() const {
+        return lexema.empty() && simbolo.empty();
+    }
 };
 
 // Deixa publico a função que vai escrever a lista de tokens 
