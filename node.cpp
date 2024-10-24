@@ -31,7 +31,7 @@ void TabelaDeSimbolos::insertAtHead(string data, string tipo, int escopo, int me
 
     newNode->next = head;
     head = newNode;
-    // cout << "[" <<data << "] lido" << endl; 
+    cout << "[" <<data << "] lido" << endl; 
 }
 
 bool TabelaDeSimbolos::buscar(string data) {
