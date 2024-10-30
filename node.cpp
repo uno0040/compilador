@@ -5,13 +5,12 @@
 using namespace std;
 
 // Implementação do construtor da classe Node
-Node::Node(string data, string tipo, int escopo, int memoria,int linha)
+Node::Node(string data, string tipo, bool escopo, int memoria)
 {
     this->data = data;
     this->tipo = tipo;
     this->escopo = escopo;
     this->memoria = memoria;
-    this->linha = linha;
     validade = true;
     this->next = nullptr;
 }
@@ -35,6 +34,7 @@ void TabelaDeSimbolos::insertAtHead(string data, string tipo, int escopo, int me
     cout << "[" <<data << "] lido" << endl; 
 }
 
+
 bool TabelaDeSimbolos::buscar(string data) {
     Node* temp = head;
     while (temp != nullptr) {
@@ -45,6 +45,8 @@ bool TabelaDeSimbolos::buscar(string data) {
 
     return false; // Retorna nullptr se não for encontrado
 }
+
+
 
 // Implementação da função searchFor
 Node* TabelaDeSimbolos::searchFor(string data) {
