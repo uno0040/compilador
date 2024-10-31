@@ -72,6 +72,10 @@ void TabelaDeSimbolos::setVarTypes(string tipo, string var) {
     }
 }
 
+bool TabelaDeSimbolos::buscarDuplicata(string lexema) {
+    
+}
+
 // Implementação da função display
 void TabelaDeSimbolos::display() {
     Node* temp = head;

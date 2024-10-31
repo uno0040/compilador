@@ -21,14 +21,15 @@ int main() {
         cerr << "Erro ao abrir o arquivo!" << endl;
         return 1;
     }
-    TabelaDeSimbolos table;
+    TabelaDeSimbolos table; // usada para o lexico
+    TabelaDeSimbolos SymbolTable; // usada para o semantico
     Token inicio;
     // Compilando o codigo fonte 
     // while (!Codigo_fonte.eof()) {
         
 
         // inicio = analisadorLexical(Codigo_fonte,table); 
-    analisadorSintatico(Codigo_fonte,table);
+    analisadorSintatico(Codigo_fonte,table,SymbolTable);
         
     // }
     // table.display();

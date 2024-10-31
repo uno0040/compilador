@@ -650,9 +650,10 @@ void Analisa_comandos(Token &token, ifstream &codigo_fonte, string &lista_erros,
     }
 }
 
-void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
+void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table, TabelaDeSimbolos& SymbolTable)
 {
-    
+    // table é utilizada para o LÉXICO
+    // SymbolTable é utilizada pelo SEMÂNTICO
     string lista_erros = "lista_erros.txt";
     Token token = analisadorLexical(codigo_fonte,table);
     if (token.simbolo == "sprograma")

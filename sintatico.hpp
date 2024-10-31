@@ -43,13 +43,16 @@ public:
     // Altera o campo tipo de todas as variáveis com o nome passado
     void setVarTypes(string tipo, string var);
 
+    // Busca por duplicatas deste lexema
+    bool buscarDuplicata(string lexema);
+
     // Exibe a tabela de símbolos
     void display();
 
     Node* pop();
 };
 
-void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table);
+void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table, TabelaDeSimbolos& SymbolTable);
 void Analisa_subrotinas(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table);
 void Analisa_identificador(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table);
 void AnalisaBloco(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table);
