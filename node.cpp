@@ -11,7 +11,6 @@ Node::Node(string data, string tipo, bool escopo, int memoria)
     this->tipo = tipo;
     this->escopo = escopo;
     this->memoria = memoria;
-    validade = true;
     this->next = nullptr;
 }
 
@@ -31,7 +30,7 @@ void TabelaDeSimbolos::insertAtHead(string data, string tipo, bool escopo, int m
 
     newNode->next = head;
     head = newNode;
-    cout << "[" <<data << "] lido" << endl; 
+    // cout << "[" <<data << "] lido" << endl; 
 }
 
 
@@ -61,19 +60,56 @@ Node* TabelaDeSimbolos::searchFor(string data) {
     return nullptr; // Retorna nullptr se não for encontrado
 }
 
-// Implementação da função setVarTypes
-void TabelaDeSimbolos::setVarTypes(string tipo, string var) {
+// Insere tipos nas variáveis da tabela
+void TabelaDeSimbolos::insereTipoVar(string tipo) {
     Node* temp = head;
-
-    while (temp != nullptr) {
-        if (temp->data == var)
-            temp->tipo = tipo;
+    temp = temp->next;
+    while (temp != nullptr && temp->tipo == "variavel") {
+        temp->tipo = tipo;
         temp = temp->next;
     }
 }
 
-bool TabelaDeSimbolos::buscarDuplicata(string lexema) {
-    
+// Busca se há mais de uma váriavel com este lexema na tabela de símbolos    
+bool TabelaDeSimbolos::buscarDuplicataVar(string lexema) {
+
+    int contador = 0;
+    Node* temp = head;
+
+    while (temp != nullptr) {
+        if (temp->data == lexema && temp->tipo == "variavel")
+            contador++;
+        if (contador >= 2)
+            return true;
+        temp = temp->next;
+    }
+    return false;
+}
+
+// Busca se há mais de uma variável ou função com este lexema na tabela de símbolos    
+bool TabelaDeSimbolos::buscarDeclVarFunc(string lexema) {
+
+    Node* temp = head;
+
+    while (temp != nullptr) {
+        if (temp->data == lexema && (temp->tipo == "variavel" || temp->tipo == "funcao")) // ALTERAR ESTE IF
+            return true;
+        temp = temp->next;
+    }
+    return false;
+}
+
+// Busca se a variável foi declarada na tabela
+bool TabelaDeSimbolos::buscarDeclVar(string lexema) {
+
+    Node* temp = head;
+
+    while (temp != nullptr) {
+        if (temp->data == lexema && temp->tipo == "variavel")
+            return true;
+        temp = temp->next;
+    }
+    return false;
 }
 
 // Implementação da função display

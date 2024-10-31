@@ -14,9 +14,8 @@ public:
     // Dados do nó
     string data;
     string tipo;
-    int escopo;
+    bool escopo;
     int memoria;
-    bool validade;
     // Ponteiro para o próximo nó
     Node* next;
 
@@ -32,7 +31,7 @@ public:
     // Construtor da tabela
     TabelaDeSimbolos();
 
-    // Insere um identificador no topo da pilha
+    // Insere um identificador no topo da pilha (insere_tabela)
     void insertAtHead(string data, string tipo = "", bool escopo = false, int memoria = -1);
 
     // Busca pelo identificador na pilha
@@ -40,11 +39,19 @@ public:
 
     bool buscar(string data);
 
-    // Altera o campo tipo de todas as variáveis com o nome passado
-    void setVarTypes(string tipo, string var);
+    // Altera o campo tipo de todas as variáveis com o nome passado (coloca_tipo_tabela)
+    void insereTipoVar(string tipo);
 
-    // Busca por duplicatas deste lexema
-    bool buscarDuplicata(string lexema);
+    // Busca por duplicatas desta variavel (Pesquisa_duplicvar_tabela)
+    bool buscarDuplicataVar(string lexema);
+
+    // Busca por duplicatas desta variavel ou funcao (pesquisa_declvarfunc_tabela)
+    bool buscarDeclVarFunc(string lexema);
+
+    // Busca se a variável ja foi declarada na tabela de símbolos (pesquisa_declvar_tabela)
+    bool buscarDeclVar(string lexema);
+
+
 
     // Exibe a tabela de símbolos
     void display();
