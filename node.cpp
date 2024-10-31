@@ -21,8 +21,8 @@ TabelaDeSimbolos::TabelaDeSimbolos() {
 }
 
 // Implementação da função insertAtHead
-void TabelaDeSimbolos::insertAtHead(string data, string tipo, int escopo, int memoria, int linha) {
-    Node* newNode = new Node(data, tipo, escopo, memoria, linha);
+void TabelaDeSimbolos::insertAtHead(string data, string tipo, bool escopo, int memoria) {
+    Node* newNode = new Node(data, tipo, escopo, memoria);
     
     if (head == nullptr) {
         head = newNode;
