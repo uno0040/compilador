@@ -194,14 +194,14 @@ Token analisadorLexical(ifstream &file, TabelaDeSimbolos& table)
             if (tokenList.find(tokenValue) != tokenList.end())
             {
                 token_count[tokenInd[tokenList[tokenValue]]]++;
-                table.insertAtHead(tokenValue,tokenList[tokenValue]);
+                // table.insertAtHead(tokenValue,tokenList[tokenValue]);
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, tokenList[tokenValue],linha);
             }
             else
             {
                 // É um identificador :D
                 token_count[tokenInd[tokenList["identificador"]]]++;
-                table.insertAtHead(tokenValue,tokenList["identificador"]);
+                // table.insertAtHead(tokenValue,tokenList["identificador"]);
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, tokenList["identificador"],linha);
             }
         }
@@ -218,7 +218,7 @@ Token analisadorLexical(ifstream &file, TabelaDeSimbolos& table)
 
             file.unget();
             token_count[tokenInd["snumero"]]++;
-            table.insertAtHead(tokenValue,"snumero");
+            // table.insertAtHead(tokenValue,"snumero");
             return escreveToken_no_arquivo_lista_de_tokens(tokenValue, "snumero",linha);
         }
         else if (c == ':')
@@ -241,12 +241,12 @@ Token analisadorLexical(ifstream &file, TabelaDeSimbolos& table)
             if (tokenList.find(tokenValue) != tokenList.end())
             {
                 token_count[tokenInd[tokenList[tokenValue]]]++;
-                table.insertAtHead(tokenValue,tokenList[tokenValue]);
+                // table.insertAtHead(tokenValue,tokenList[tokenValue]);
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, tokenList[tokenValue],linha);
             }
             else
             {
-                table.insertAtHead(tokenValue,"serro");
+                // table.insertAtHead(tokenValue,"serro");
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, "serro",linha);
             }
         }
@@ -258,12 +258,12 @@ Token analisadorLexical(ifstream &file, TabelaDeSimbolos& table)
             if (tokenList.find(tokenValue) != tokenList.end())
             {
                 token_count[tokenInd[tokenList[tokenValue]]]++;
-                table.insertAtHead(tokenValue,tokenList[tokenValue]);
+                // table.insertAtHead(tokenValue,tokenList[tokenValue]);
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, tokenList[tokenValue],linha);
             }
             else
             {
-                table.insertAtHead(tokenValue,"serro");
+                // table.insertAtHead(tokenValue,"serro");
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, "serro",linha);
             }
         }
@@ -284,12 +284,12 @@ Token analisadorLexical(ifstream &file, TabelaDeSimbolos& table)
             {
 
                 token_count[tokenInd[tokenList[tokenValue]]]++;
-                table.insertAtHead(tokenValue,tokenList[tokenValue]);
+                // table.insertAtHead(tokenValue,tokenList[tokenValue]);
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, tokenList[tokenValue],linha);
             }
             else
             {
-                table.insertAtHead(tokenValue,"serro");
+                // table.insertAtHead(tokenValue,"serro");
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, "serro",linha);
             }
         }
@@ -303,19 +303,19 @@ Token analisadorLexical(ifstream &file, TabelaDeSimbolos& table)
             {
 
                 token_count[tokenInd[tokenList[tokenValue]]]++;
-                table.insertAtHead(tokenValue,tokenList[tokenValue]);
+                // table.insertAtHead(tokenValue,tokenList[tokenValue]);
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, tokenList[tokenValue],linha);
             }
             else
             {
-                table.insertAtHead(tokenValue,"serro");
+                // table.insertAtHead(tokenValue,"serro");
                 return escreveToken_no_arquivo_lista_de_tokens(tokenValue, "serro",linha);
             }
         }
         else
         {
             string tokenValue(1, c);
-            table.insertAtHead(tokenValue,"serro");
+            // table.insertAtHead(tokenValue,"serro");
             return escreveToken_no_arquivo_lista_de_tokens(tokenValue, "serro",linha);
         }
         linha++;
