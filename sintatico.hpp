@@ -40,16 +40,16 @@ public:
     bool buscar(string data);
 
     // Altera o campo tipo de todas as variáveis com o nome passado (coloca_tipo_tabela)
-    void insereTipoVar(string tipo);
+    void coloca_tipo_tabela(string tipo);
 
     // Busca por duplicatas desta variavel (Pesquisa_duplicvar_tabela)
-    bool buscarDuplicataVar(string lexema);
+    bool pesquisa_duplicvar_tabela(string lexema);
 
     // Busca por duplicatas desta variavel ou funcao (pesquisa_declvarfunc_tabela)
-    bool buscarDeclVarFunc(string lexema);
+    bool pesquisa_declvarfunc_tabela(string lexema);
 
     // Busca se a variável ja foi declarada na tabela de símbolos (pesquisa_declvar_tabela)
-    bool buscarDeclVar(string lexema);
+    bool pesquisa_declvar_tabela(string lexema);
 
 
 

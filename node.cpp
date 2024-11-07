@@ -61,7 +61,7 @@ Node* TabelaDeSimbolos::searchFor(string data) {
 }
 
 // Insere tipos nas variáveis da tabela
-void TabelaDeSimbolos::insereTipoVar(string tipo) {
+void TabelaDeSimbolos::coloca_tipo_tabela(string tipo) {
     Node* temp = head;
     temp = temp->next;
     while (temp != nullptr && temp->tipo == "variavel") {
@@ -72,7 +72,7 @@ void TabelaDeSimbolos::insereTipoVar(string tipo) {
 
 // Busca se há mais de uma váriavel com este lexema na tabela de símbolos    
 // Retorna true se for encontrada, false se não for.
-bool TabelaDeSimbolos::buscarDuplicataVar(string lexema) {
+bool TabelaDeSimbolos::pesquisa_duplicvar_tabela(string lexema) {
 
     int contador = 0;
     Node* temp = head;
@@ -88,7 +88,7 @@ bool TabelaDeSimbolos::buscarDuplicataVar(string lexema) {
 }
 
 // Busca se há mais de uma variável ou função com este lexema na tabela de símbolos    
-bool TabelaDeSimbolos::buscarDeclVarFunc(string lexema) {
+bool TabelaDeSimbolos::pesquisa_declvarfunc_tabela(string lexema) {
 
     Node* temp = head;
 
@@ -101,7 +101,8 @@ bool TabelaDeSimbolos::buscarDeclVarFunc(string lexema) {
 }
 
 // Busca se a variável foi declarada na tabela
-bool TabelaDeSimbolos::buscarDeclVar(string lexema) {
+// Retorna true se encontrar e false se não encontrar a variável na table.
+bool TabelaDeSimbolos::pesquisa_declvar_tabela(string lexema) {
 
     Node* temp = head;
 

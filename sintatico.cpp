@@ -88,7 +88,7 @@ void Analisa_Tipo(Token &token, ifstream &codigo_fonte, string &lista_erros, Tab
     }
     else
     {
-        table.insereTipoVar(token.simbolo);
+        table.coloca_tipo_tabela(token.simbolo);
     }
     token = analisadorLexical(codigo_fonte,table);
 }
@@ -99,7 +99,7 @@ void AnalisaVariaveis(Token &token, ifstream &codigo_fonte, string &lista_erros,
     do {
         if (token.simbolo == "sidentificador") {
             // PESQUISAR DUPLICATAS NA TABELA O LEXEMA DO TOKEN
-                if (!table.buscarDuplicataVar(token.lexema)){
+                if (!table.pesquisa_duplicvar_tabela(token.lexema)){
                     int mem = 12222222;
                     table.insertAtHead(token.lexema, token.simbolo, mem);
                     token = analisadorLexical(codigo_fonte,table);
@@ -511,7 +511,7 @@ void Analisa_leia(Token &token, ifstream &codigo_fonte, string &lista_erros, Tab
         token = analisadorLexical(codigo_fonte,table);
         if (token.simbolo == "sidentificador") {
 
-            bool flag = table.searchFor(token.lexema);
+            bool flag = table.pesquisa_declvar_tabela(token.lexema);
             if (flag){
                 // Supostamente tem um busca toda tabela aqui e tem um erro 
                 token = analisadorLexical(codigo_fonte,table);
