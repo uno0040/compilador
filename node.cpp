@@ -34,23 +34,8 @@ void TabelaDeSimbolos::insertAtHead(string data, string tipo, bool escopo, int m
 }
 
 
-bool TabelaDeSimbolos::buscar(string data) {
+Node* TabelaDeSimbolos::buscar(string data) {
     Node* temp = head;
-    while (temp != nullptr) {
-        if (temp->data == data)
-            return true;
-        temp = temp->next;
-    }
-
-    return false; // Retorna nullptr se não for encontrado
-}
-
-
-
-// Implementação da função searchFor
-Node* TabelaDeSimbolos::searchFor(string data) {
-    Node* temp = head;
-
     while (temp != nullptr) {
         if (temp->data == data)
             return temp;
@@ -58,6 +43,36 @@ Node* TabelaDeSimbolos::searchFor(string data) {
     }
 
     return nullptr; // Retorna nullptr se não for encontrado
+}
+
+
+// Retorna true se encontrar o item buscado, false caso contrario.
+// Versão simples
+bool TabelaDeSimbolos::pesquisa_tabela_simples(string data) {
+    Node* temp = head;
+
+    while (temp != nullptr) {
+        if (temp->data == data)
+            return true;
+        temp = temp->next;
+    }
+
+    return false; 
+}
+
+
+// Retorna true se encontrar o item buscado, false caso contrario.
+// FUNÇÃO NÃO FINALIZADA, 'ind' não implementado
+bool TabelaDeSimbolos::pesquisa_tabela(string data, bool nivel, int ind) {
+    Node* temp = head;
+
+    while (temp != nullptr) {
+        if (temp->data == data && temp->escopo == nivel)
+            return true;
+        temp = temp->next;
+    }
+
+    return false; 
 }
 
 // Insere tipos nas variáveis da tabela
@@ -144,6 +159,26 @@ Node* TabelaDeSimbolos::pop() {
 // Desempilha o escopo atual
 void TabelaDeSimbolos::desempilhar_escopo() {
     while (head != nullptr && head->escopo != true) {
+        Node* temp = head;
         head = head->next;
+        delete temp;
     }
+}
+
+
+// Busca se tem uma outra função declarada com este nome
+bool TabelaDeSimbolos::pesquisa_declfunc_tabela(string lexema) {
+    Node* temp = head;
+
+    while (head != nullptr) {
+        if (temp->data == lexema && (temp->tipo == "funcao" || temp->tipo == "funcao inteiro" || temp->tipo == "funcao booleana"))
+            return true;
+        temp = temp->next;
+    }
+    return false;
+}
+
+// Define o tipo da funcao que esta no head
+void TabelaDeSimbolos::define_tipo_funcao(string tipo) {
+    head->tipo = tipo;
 }
