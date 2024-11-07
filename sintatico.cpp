@@ -104,8 +104,7 @@ void AnalisaVariaveis(Token &token, ifstream &codigo_fonte, string &lista_erros,
     do {
         if (token.simbolo == "sidentificador") {
             // PESQUISAR DUPLICATAS NA TABELA O LEXEMA DO TOKEN
-                bool flag = table.searchFor(token.lexema);
-                if (!flag){
+                if (!table.buscarDuplicataVar(token.lexema)){
                     int mem = 12222222;
                     table.insertAtHead(token.lexema, token.simbolo, mem);
                     token = analisadorLexical(codigo_fonte,table);
@@ -128,7 +127,7 @@ void AnalisaVariaveis(Token &token, ifstream &codigo_fonte, string &lista_erros,
                         writeErrors(token.linha, codigo_fonte, lista_erros,erroPontuacao);
                     }
 
-                }else{
+                } else {
                     writeErrors(token.linha, codigo_fonte, lista_erros, erroDuplicidadeDecaracao);
                 }      
         } else {

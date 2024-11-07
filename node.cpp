@@ -71,6 +71,7 @@ void TabelaDeSimbolos::insereTipoVar(string tipo) {
 }
 
 // Busca se há mais de uma váriavel com este lexema na tabela de símbolos    
+// Retorna true se for encontrada, false se não for.
 bool TabelaDeSimbolos::buscarDuplicataVar(string lexema) {
 
     int contador = 0;
