@@ -1,21 +1,103 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
 import os
+'''
+Vamos começar a geração de codigo com um alloc :D
+rotulo  instrução  atri1   atri2
+4 bits | 8 bits | 4 bits | 4 bits 
 
+'''
+
+class Instrucao:
+    def __init__(self, rotulo, instrucao, atri1, atri2):
+        self.rotulo = rotulo
+        self.instrucao = instrucao
+        self.atri1 = atri1
+        self.atri2 = atri2
+
+    def __repr__(self):
+        return f"Instrucao(rotulo={self.rotulo}, instrucao={self.instrucao}, atri1={self.atri1}, atri2={self.atri2})"
+
+M = []
+i = -1
+file_path = None
+
+def get(line):
+    # Supondo que 'line' é uma string de 20 bits (ou seja, 20 caracteres '0' ou '1')
+    rotulo = int(line[0:4], 2)         # 4 bits para o rótulo
+    instrucao = int(line[4:12], 2)     # 8 bits para a instrução
+    atri1 = int(line[12:16], 2)        # 4 bits para o primeiro atributo
+    atri2 = int(line[16:20], 2)        # 4 bits para o segundo atributo
+    return Instrucao(rotulo, instrucao, atri1, atri2)
+
+# Função que vi fazer o comando de run 
 def run_compiler():
-    # Placeholder function for the "Run" functionality
-    messagebox.showinfo("Run", "Compiling...")
+    if file_path:
+        ponteiro_leitura = 1
+
+        messagebox.showinfo("Run", "Compiling...")
+        with open(file_path, "r") as file:
+            M.clear()
+            line = get(file.readline())
+
+            while line.atri1 != "HLT":
+                if line.atri1 == "START":
+                    line = get(file.readline())
+                elif line.atri1 == "LDC":
+                    pass
+                elif line.atri1 == "LDV":
+                    pass
+                elif line.atri1 == "ADD":
+                    pass 
+                elif line.atri1 == "SUB":
+                    pass
+                elif line.atri1 == "MULT":
+                    pass
+                elif line.atri1 == "DIVI":
+                    pass
+                elif line.atri1 == "INV":
+                    pass
+                elif line.atri1 == "AND":
+                    pass
+                elif line.atri1 == "OR":
+                    pass
+                elif line.atri1 == "NEG":
+                    pass
+                elif line.atri1 == "CME":
+                    pass
+                elif line.atri1 == "CMA":
+                    pass
+                elif line.atri1 == "CEQ":
+                    pass
+                elif line.atri1 == "CDIF":
+                    pass
+                elif line.atri1 == "CMEQ":
+                    pass
+                elif line.atri1 == "CMAQ":
+                    pass
+                else:
+                    print("Ocorreu algum erro!")
+                    break 
+                
+            
+
+
+            
+
+            
+    else:
+        messagebox.showinfo("Erro", "Selecione um arquivo !")
 
 def debug_code():
     # Placeholder function for the "Debug" functionality
     messagebox.showinfo("Debug", "Debugging...")
 
+# Função que vai deixar o usuario pegar um arquivo obj
 def import_file():
+    global file_path
+
     file_path = filedialog.askopenfilename(filetypes=[("OBJ files", "*.obj")])
-    if file_path:
-        with open(file_path, "r") as file:
-            content = file.read()
-            entrada_text.insert("1.0", content)
+    
 
 # Initialize the main window
 root = tk.Tk()
