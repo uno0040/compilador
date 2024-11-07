@@ -77,7 +77,7 @@ bool TabelaDeSimbolos::pesquisa_duplicvar_tabela(string lexema) {
     int contador = 0;
     Node* temp = head;
 
-    while (temp != nullptr) {
+    while (temp != nullptr && temp->escopo == false) {
         if (temp->data == lexema && temp->tipo == "variavel")
             contador++;
         if (contador >= 2)
@@ -140,3 +140,10 @@ Node* TabelaDeSimbolos::pop() {
     head = head->next;
     return temp;
 }   
+
+// Desempilha o escopo atual
+void TabelaDeSimbolos::desempilhar_escopo() {
+    while (head != nullptr && head->escopo != true) {
+        head = head->next;
+    }
+}

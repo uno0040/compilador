@@ -8,6 +8,10 @@
 
 using namespace std;
 
+// alterar funcoes para buscar escopos.
+// marcar o bool escopo, buscar até la!
+// NEM TODAS AS FUNCOES PRECISAM DISSO!
+
 string erroTipoInvalido = "!!! Erro tipo nao existente!";
 string erroIdentificadorNaoExiste = "!!! Erro identificador nao declarado!";
 string erroIdentificadorPrograma = "!!! Espera-se um identificador Programa";

@@ -51,7 +51,7 @@ public:
     // Busca se a variável ja foi declarada na tabela de símbolos (pesquisa_declvar_tabela)
     bool pesquisa_declvar_tabela(string lexema);
 
-
+    void desempilhar_escopo();
 
     // Exibe a tabela de símbolos
     void display();
