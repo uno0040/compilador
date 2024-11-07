@@ -546,7 +546,7 @@ void Analisa_escreva(Token &token, ifstream &codigo_fonte, string &lista_erros, 
         if (token.simbolo == "sidentificador")
         {
             
-            bool existe = table.searchFor(token.lexema);
+            bool existe = table.pesquisa_declvarfunc_tabela(token.lexema);
 
             if (existe)
             {
