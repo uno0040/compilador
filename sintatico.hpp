@@ -34,10 +34,13 @@ public:
     // Insere um identificador no topo da pilha (insere_tabela)
     void insertAtHead(string data, string tipo = "", bool escopo = false, int memoria = -1);
 
-    // Busca pelo identificador na pilha
-    Node* searchFor(string data);
+    // Busca pela pilha
+    bool pesquisa_tabela(string data, bool nivel, int ind);
 
-    bool buscar(string data);
+    // Busca pela pilha só pelo lexema
+    bool pesquisa_tabela_simples(string data);
+
+    Node* buscar(string data);
 
     // Altera o campo tipo de todas as variáveis com o nome passado (coloca_tipo_tabela)
     void coloca_tipo_tabela(string tipo);
@@ -51,6 +54,13 @@ public:
     // Busca se a variável ja foi declarada na tabela de símbolos (pesquisa_declvar_tabela)
     bool pesquisa_declvar_tabela(string lexema);
 
+    // Busca se a função já foi declarada
+    bool pesquisa_declfunc_tabela(string lexema);
+
+    // Define tipo da função que é o HEAD
+    void define_tipo_funcao(string tipo);
+
+    // Desempilha o escopo atual
     void desempilhar_escopo();
 
     // Exibe a tabela de símbolos

@@ -178,19 +178,22 @@ void Analisa_declaracao_funcao(Token &token, ifstream &codigo_fonte, string &lis
     if (token.simbolo == "sidentificador") {
         // Implementar uma busca para procedimentos, verifica se não tem algum procedimento com o mesmo nome
         // se tiver com o mesmo nome e marcado -> B.O
-        bool flag = false;
+        bool flag = table.pesquisa_declvar_tabela(token.lexema);
 
-        if (flag){
+        if (!flag){
             // Se não encontrou
             // Tem que implementar um insertAt do tipo procedimento (ele não vai ter memoria por exemplo)
             // mas eu n sei o que é nivel 
             // provavelmente vamos precisar de uma variavel global ?
-            // table.insertAtHead(token.lexema, "procedimento",algo aqui , parte em vemelho :( )
-
-             token = analisadorLexical(codigo_fonte,table);
+            table.insertAtHead(token.lexema, "",true /*, parte em vermelho*/);
+            token = analisadorLexical(codigo_fonte,table);
             if (token.simbolo == "sdoispontos") {
                 token = analisadorLexical(codigo_fonte,table);
                 if (token.simbolo == "sinteiro" || token.simbolo == "sbooleano") {
+                    if (token.simbolo == "sinteiro") 
+                        table.define_tipo_funcao("funcao inteiro");
+                    else
+                        table.define_tipo_funcao("funcao booleana");
                     token = analisadorLexical(codigo_fonte,table);
                     if (token.simbolo == "sponto_virgula") {
                         AnalisaBloco(token, codigo_fonte, lista_erros,table);
@@ -213,6 +216,7 @@ void Analisa_declaracao_funcao(Token &token, ifstream &codigo_fonte, string &lis
         writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         table.pop();
     }
+    table.desempilhar_escopo();
 }
 
 void Analisa_subrotinas(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table)
@@ -273,7 +277,7 @@ void Analisa_chamada_funcao(Token &token, ifstream &codigo_fonte, string &lista_
         // AMIGAO TA ERRADO AQUI 
         // PRECISAMOS DE UMA BUSCA DO TIPO DECLARAÇAO DE FUNCAO 
         // PROCURA ATÉ ACHAR UM NOME MARCADO , SE FOR DIFERENTE IRMÃO RETORNA TRUE NESSA PORR
-        bool flag = table.searchFor(token.lexema);
+        bool flag = table.pesquisa_declfunc_tabela(token.lexema);
             if (!flag){
                 Analisa_identificador(token, codigo_fonte, lista_erros,table);
                 
@@ -325,6 +329,7 @@ void Analisa_fator(Token &token, ifstream &codigo_fonte, string &lista_erros, Ta
     if (token.simbolo == "sidentificador")
     {
         // Pesquisar na tabela  e esse if ta errado provavelmente ;D
+        // if (table.searchFor())
         Analisa_chamada_funcao(token, codigo_fonte, lista_erros,table);
     }
     else { 
