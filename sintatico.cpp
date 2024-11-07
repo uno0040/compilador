@@ -88,12 +88,7 @@ void Analisa_Tipo(Token &token, ifstream &codigo_fonte, string &lista_erros, Tab
     }
     else
     {
-        // Precisamos de uma busca por lexema e alterar tipo
-        // ALTERAR AQUI
-        // ALTERAR AQUI 
-        // ALTERAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
-        // faz a função cara :(
-
+        table.insereTipoVar(token.simbolo);
     }
     token = analisadorLexical(codigo_fonte,table);
 }
