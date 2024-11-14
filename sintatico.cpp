@@ -146,17 +146,22 @@ void Analisa_declaracao_procedimento(Token &token, ifstream &codigo_fonte, strin
     token = analisadorLexical(codigo_fonte,table);
     if (token.simbolo == "sidentificador")
     {
-        token = analisadorLexical(codigo_fonte,table);
-        if (token.simbolo == "sponto_virgula")
-        {
-            AnalisaBloco(token, codigo_fonte, lista_erros,table);
+        if (!table.pesquisa_declproc_tabela(token.lexema)) {
+            table.insertAtHead(token.lexema, "procedimento", true /*, texto em vermelho*/);
+            token = analisadorLexical(codigo_fonte,table);
+            if (token.simbolo == "sponto_virgula")
+            {
+                AnalisaBloco(token, codigo_fonte, lista_erros,table);
+            }
+            else
+            {
+                // erro de pontuação ponto_virgula
+                writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
+            }
         }
-        else
-        {
-            // erro de pontuação ponto_virgula
-            writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
+        else {
+            // ERRO
         }
-    
     }
     else
     {
@@ -165,6 +170,7 @@ void Analisa_declaracao_procedimento(Token &token, ifstream &codigo_fonte, strin
         writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         // RETIRAR O GALHO DA TABELA DE SIMBOLOS
     }
+    table.desempilhar_escopo();
 }
 
 // ME ARRUMA CARAAAAAAAAAAAAAAAA
@@ -329,7 +335,16 @@ void Analisa_fator(Token &token, ifstream &codigo_fonte, string &lista_erros, Ta
     if (token.simbolo == "sidentificador")
     {
         // Pesquisar na tabela  e esse if ta errado provavelmente ;D
-        // if (table.searchFor())
+        Node* declarada = table.pesquisa_tabela(token.lexema);
+        if (declarada != nullptr) {
+            if (declarada->tipo == "funcao inteiro" || declarada->tipo == "funcao booleana")
+                Analisa_chamada_funcao(token, codigo_fonte, lista_erros,table);
+            else
+                token = analisadorLexical(codigo_fonte,table);
+        }
+        else {
+            // ERRO
+        }
         Analisa_chamada_funcao(token, codigo_fonte, lista_erros,table);
     }
     else { 

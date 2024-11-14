@@ -34,8 +34,11 @@ public:
     // Insere um identificador no topo da pilha (insere_tabela)
     void insertAtHead(string data, string tipo = "", bool escopo = false, int memoria = -1);
 
-    // Busca pela pilha
-    bool pesquisa_tabela(string data, bool nivel, int ind);
+    // Retorna a primeira declaracao do item buscado
+    Node* pesquisa_tabela(string data);
+
+    // Busca a pilha pela declaração de procedimento
+    bool pesquisa_declproc_tabela(string lexema);
 
     // Busca pela pilha só pelo lexema
     bool pesquisa_tabela_simples(string data);

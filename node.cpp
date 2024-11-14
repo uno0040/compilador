@@ -61,18 +61,16 @@ bool TabelaDeSimbolos::pesquisa_tabela_simples(string data) {
 }
 
 
-// Retorna true se encontrar o item buscado, false caso contrario.
-// FUNÇÃO NÃO FINALIZADA, 'ind' não implementado
-bool TabelaDeSimbolos::pesquisa_tabela(string data, bool nivel, int ind) {
+// Retorna a primeira declaracao do item buscado
+Node* TabelaDeSimbolos::pesquisa_tabela(string data) {
     Node* temp = head;
-
+    Node* r = nullptr;
     while (temp != nullptr) {
-        if (temp->data == data && temp->escopo == nivel)
-            return true;
+        if (temp->data == data)
+            r = temp;
         temp = temp->next;
     }
-
-    return false; 
+    return r; 
 }
 
 // Insere tipos nas variáveis da tabela
