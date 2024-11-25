@@ -20,7 +20,7 @@ public:
     Node* next;
 
     // Construtor do nó
-    Node(string data, string tipo = "", bool escopo, int memoria);
+    Node(string data, string tipo = "", bool escopo = false, int memoria = 99999999);
 };
 
 // Declaração da classe TabelaDeSimbolos
