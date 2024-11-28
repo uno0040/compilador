@@ -12,6 +12,8 @@ using namespace std;
 // marcar o bool escopo, buscar até la!
 // NEM TODAS AS FUNCOES PRECISAM DISSO!
 
+int mem = 1;
+
 string erroTipoInvalido = "!!! Erro tipo nao existente!";
 string erroIdentificadorNaoExiste = "!!! Erro identificador nao declarado!";
 string erroIdentificadorPrograma = "!!! Espera-se um identificador Programa";
@@ -106,6 +108,7 @@ void AnalisaVariaveis(Token &token, ifstream &codigo_fonte, string &lista_erros,
                 if (!table.pesquisa_duplicvar_tabela(token.lexema)){
                     int mem = 12222222;
                     table.insertAtHead(token.lexema, "variavel", mem);
+                    mem++;
                     token = analisadorLexical(codigo_fonte,table);
 
                     if (token.simbolo == "svirgula" || token.simbolo == "sdoispontos") {
@@ -262,7 +265,7 @@ void Chamada_procedimento(Token &token, ifstream &codigo_fonte, string &lista_er
 {
     
     // token = analisadorLexical(codigo_fonte,table);
-    cout << "#[" << token_passado.lexema << "]#" <<endl;
+    // cout << "#[" << token_passado.lexema << "]#" <<endl;
     if (token_passado.simbolo == "sidentificador")
     {
 
@@ -495,7 +498,7 @@ void Analisa_enquanto(Token &token, ifstream &codigo_fonte, string &lista_erros,
     int auxrot1,auxrot2;
     // variaveis auxiliares do rótulo como definido nos slides
     auxrot1 = rotulo;
-    //gera(rotulo,NULL,"","") // inicio do while
+    //gera(rotulo,NULL,"    ","    ") // inicio do while
     rotulo++;
     token = analisadorLexical(codigo_fonte,table);
 
@@ -697,7 +700,7 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
         {
 
             // COLOCAR O NOME DO PROGRAMA NA TABELA DE SIMBOLOS :D
-            int mem = 1022201455;
+            
             table.insertAtHead(token.lexema, "nomedeprograma", true, mem);
             
             token = analisadorLexical(codigo_fonte,table);
