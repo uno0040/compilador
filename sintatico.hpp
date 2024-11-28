@@ -69,6 +69,16 @@ public:
     // Exibe a tabela de símbolos
     void display();
 
+    // Conta a quantidade de variaveis no escopo atual para uso de ALLOC
+    int qt_var_escopo();
+
+    // Conta a quantidade de variaveis na tabela 
+    int qt_var_total();
+
+    // Retorna o endereço onde o lexema buscado está armazenado.
+    // Retorna -1 se não achar o endereço do lexema.
+    int locEndMemoria(string lexema);
+
     Node* pop();
 };
 
