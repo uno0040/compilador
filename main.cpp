@@ -7,6 +7,7 @@
 #include "tokens.hpp"
 #include "lexical.hpp"
 #include "sintatico.hpp"
+#include "geracao.hpp"
 
 using namespace std;
 
@@ -15,7 +16,8 @@ int main() {
     string filename = "oi.txt";
     ifstream Codigo_fonte(filename);
     int linha = 1;
-
+    // Limpa ou cria se não tiver criado o arquivo saida.txt
+    limpar_arquivo();
     // Erro de abertura de arquivo 
     if (!Codigo_fonte.is_open()) {
         cerr << "Erro ao abrir o arquivo!" << endl;
