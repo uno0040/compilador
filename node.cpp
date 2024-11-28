@@ -180,3 +180,34 @@ bool TabelaDeSimbolos::pesquisa_declfunc_tabela(string lexema) {
 void TabelaDeSimbolos::define_tipo_funcao(string tipo) {
     head->tipo = tipo;
 }
+
+int TabelaDeSimbolos::qt_var_escopo() {
+    int r = 0;
+    Node* temp = head;
+    while (temp != nullptr && temp->escopo != true) {
+        if (temp->tipo == "variavel" || temp->tipo == "sinteiro" || temp->tipo == "sbooleano")
+            r++;
+        temp = temp->next;
+    }
+    return r;
+}
+
+int TabelaDeSimbolos::qt_var_total() {
+    int r = 0;
+    Node* temp = head;
+    while (temp != nullptr) {
+        if (temp->tipo == "variavel" || temp->tipo == "sinteiro" || temp->tipo == "sbooleano")
+            r++;
+        temp = temp->next;
+    }
+    return r;
+}
+
+int TabelaDeSimbolos::locEndMemoria(string lexema) {
+    Node* temp = head;
+    while (temp != nullptr) {
+        if (temp->data == lexema)
+            return temp->memoria;
+    }    
+    return -1;
+}
