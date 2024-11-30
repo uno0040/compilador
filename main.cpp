@@ -31,7 +31,7 @@ int main() {
         
 
         // inicio = analisadorLexical(Codigo_fonte,table); 
-    analisadorSintatico(Codigo_fonte,table,SymbolTable);
+    analisadorSintatico(Codigo_fonte,table);
         
     // }
     // table.display();

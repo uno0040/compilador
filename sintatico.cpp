@@ -5,6 +5,7 @@
 #include "lexical.hpp"
 #include "erros.hpp"
 #include "sintatico.hpp"
+#include "geracao.hpp"
 
 using namespace std;
 
@@ -106,7 +107,6 @@ void AnalisaVariaveis(Token &token, ifstream &codigo_fonte, string &lista_erros,
         if (token.simbolo == "sidentificador") {
             // PESQUISAR DUPLICATAS NA TABELA O LEXEMA DO TOKEN
                 if (!table.pesquisa_duplicvar_tabela(token.lexema)){
-                    int mem = 12222222;
                     table.insertAtHead(token.lexema, "variavel", mem);
                     mem++;
                     token = analisadorLexical(codigo_fonte,table);
@@ -235,7 +235,7 @@ void Analisa_subrotinas(Token &token, ifstream &codigo_fonte, string &lista_erro
     // cout << "bem vindo ao Analisa_subrotinas" << endl;
     if (token.simbolo == "sprocedimento" || token.simbolo == "sfuncao") {
         auxrot = rotulo;
-        //gera ("",JMP,rotulo,"") //salta sub-rotinas
+        geraJMP(rotulo);//salta sub-rotinas
     }
     while (token.simbolo == "sprocedimento" || token.simbolo == "sfuncao") {
         if (token.simbolo == "sprocedimento") {
@@ -261,7 +261,7 @@ void Analisa_atribuicao(Token &token, ifstream &codigo_fonte, string &lista_erro
     
 }
 
-void Chamada_procedimento(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table, Token token_passado)
+void Chamada_procedimento(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table, Token token_passado,int& rotulo)
 {
     
     // token = analisadorLexical(codigo_fonte,table);
@@ -270,7 +270,7 @@ void Chamada_procedimento(Token &token, ifstream &codigo_fonte, string &lista_er
     {
 
 
-        Analisa_identificador(token_passado, codigo_fonte, lista_erros,table);
+        Analisa_identificador(token_passado, codigo_fonte, lista_erros,table,rotulo);
         // token = analisadorLexical(codigo_fonte,table);
     }
     else
@@ -487,7 +487,7 @@ void Analisa_atrib_chprocedimento(Token &token, ifstream &codigo_fonte, string &
     }
     else
     {
-        Chamada_procedimento(token, codigo_fonte, lista_erros,table, token_passado);
+        Chamada_procedimento(token, codigo_fonte, lista_erros,table, token_passado,rotulo);
     }
 }
 
@@ -499,6 +499,7 @@ void Analisa_enquanto(Token &token, ifstream &codigo_fonte, string &lista_erros,
     // variaveis auxiliares do rótulo como definido nos slides
     auxrot1 = rotulo;
     //gera(rotulo,NULL,"    ","    ") // inicio do while
+    geraNULL(rotulo);
     rotulo++;
     token = analisadorLexical(codigo_fonte,table);
 
@@ -507,11 +508,14 @@ void Analisa_enquanto(Token &token, ifstream &codigo_fonte, string &lista_erros,
     {
         auxrot2 = rotulo;
         // gera("",JMPF,rotulo,"");
+        geraJMPF(rotulo);
         rotulo++;  
         token = analisadorLexical(codigo_fonte,table);
         Analisa_comando_simples(token, codigo_fonte, lista_erros,table,rotulo);
         // gera("",JMP,auxrot1,""); // retorna inicio loop
+        geraJMP(auxrot1);
         // gera(auxrot2,NULL,"",""); // fim do while
+        geraNULL(auxrot2);
     }
     else
     {
