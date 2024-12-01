@@ -211,3 +211,14 @@ int TabelaDeSimbolos::locEndMemoria(string lexema) {
     }    
     return -1;
 }
+
+bool TabelaDeSimbolos::pesquisa_declproc_tabela(string lexema) {
+    Node* temp = head;
+
+    while (head != nullptr) {
+        if (temp->data == lexema && (temp->tipo == "procedimento"))
+            return true;
+        temp = temp->next;
+    }
+    return false;
+}

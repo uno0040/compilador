@@ -14,6 +14,7 @@ using namespace std;
 // NEM TODAS AS FUNCOES PRECISAM DISSO!
 
 int mem = 1;
+// bool flag_primeira = true;
 
 string erroTipoInvalido = "!!! Erro tipo nao existente!";
 string erroIdentificadorNaoExiste = "!!! Erro identificador nao declarado!";
@@ -235,7 +236,10 @@ void Analisa_subrotinas(Token &token, ifstream &codigo_fonte, string &lista_erro
     // cout << "bem vindo ao Analisa_subrotinas" << endl;
     if (token.simbolo == "sprocedimento" || token.simbolo == "sfuncao") {
         auxrot = rotulo;
+        // GERA ('  ',JMP,rotulo,'  ')
         geraJMP(rotulo);//salta sub-rotinas
+        rotulo++;
+        flag = 1;
     }
     while (token.simbolo == "sprocedimento" || token.simbolo == "sfuncao") {
         if (token.simbolo == "sprocedimento") {
@@ -250,6 +254,10 @@ void Analisa_subrotinas(Token &token, ifstream &codigo_fonte, string &lista_erro
         else {
             writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
         }
+    }
+    if (flag == 1) {
+        // GERA(auxrot,NULL,´ ´,´ ´)
+        geraNULL(auxrot);
     }
 }
 
@@ -705,8 +713,9 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
 
             // COLOCAR O NOME DO PROGRAMA NA TABELA DE SIMBOLOS :D
             
-            table.insertAtHead(token.lexema, "nomedeprograma", true, mem);
-            
+            table.insertAtHead(token.lexema, "nomedeprograma", true, mem); // CHECAR AQUI
+            geraSTART();
+            geraALLOC(0,1);
             token = analisadorLexical(codigo_fonte,table);
             
             if (token.simbolo == "sponto_virgula")
