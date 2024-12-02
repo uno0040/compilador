@@ -55,6 +55,7 @@ void Analisa_et_variaveis(Token &token, ifstream &codigo_fonte, string &lista_er
                 {
                     // erro de ponto e virgula <etapa de declaração de variaveis>
                     writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
+                    exit(0);
                 }
 
             } while (token.simbolo == "sidentificador");
@@ -162,7 +163,9 @@ void Analisa_declaracao_procedimento(Token &token, ifstream &codigo_fonte, strin
             else
             {
                 // erro de pontuação ponto_virgula
+                cout << "decl_proc" << endl;
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
+                exit(0);
             }
         }
 
@@ -256,7 +259,9 @@ void Analisa_subrotinas(Token &token, ifstream &codigo_fonte, string &lista_erro
             token = analisadorLexical(codigo_fonte,table);
         }
         else {
+            cout << "subrotinas" << endl;
             writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
+            exit(0);
         }
     }
     if (flag == 1) {
@@ -315,17 +320,6 @@ void Analisa_chamada_funcao(Token &token, ifstream &codigo_fonte, string &lista_
                 table.insertAtHead(token.lexema,"funcao",true);
                 // CHECAR AQUI
                 token = analisadorLexical(codigo_fonte,table);
-                if (token.simbolo == "sponto_virgula")
-                {
-                    token = analisadorLexical(codigo_fonte,table);
-                }
-                else
-                {
-                    // erro de pontuação ponto_virgula
-                    cout << "Analisa CHAMADA FUNCAO ERRO" << endl;
-                    cout << token.lexema << " " << token.simbolo << endl;
-                    writeErrors(token.linha, codigo_fonte, lista_erros, erroDoisPontos);
-                }
             }
             else{
                 cout << "Analisa CHAMADA FUNCAO ERRO 2" << endl;
@@ -476,7 +470,9 @@ void Analisa_chamada_procedimento(Token &token, ifstream &codigo_fonte, string &
         Analisa_identificador(token, codigo_fonte, lista_erros,table,rotulo);
         token = analisadorLexical(codigo_fonte,table);
         if (token.simbolo != "sponto_virgula") {
+            cout << "analisa_Chamada_procedimento" << endl;
             writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
+            exit(0);
         }
     }
 }
@@ -679,6 +675,7 @@ void Analisa_comandos(Token &token, ifstream &codigo_fonte, string &lista_erros,
         Analisa_comando_simples(token, codigo_fonte, lista_erros,table,rotulo);
 
         while (token.simbolo != "sfim") {
+            cout << token.lexema << " dentro do while " << token.simbolo << endl;
             if (token.simbolo == "sponto_virgula") {
                 token = analisadorLexical(codigo_fonte,table);
                 if (token.simbolo != "sfim") {
@@ -686,7 +683,10 @@ void Analisa_comandos(Token &token, ifstream &codigo_fonte, string &lista_erros,
                 }
             }
             else {
+                cout << "analisa_comandos" << endl;
+                cout << token.lexema << " " << token.simbolo << endl;
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
+                exit(0);
                 break;
             }
         }
@@ -736,12 +736,15 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
             else
             {
                 // Erro de ponto-virgula <programa>
+                cout << "main" << endl;
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
+                exit(0);
             }
         }
         else
         {
             // Erro do identificador <programa>
+            cout << "main" << endl;
             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificadorPrograma);
         }
     }
