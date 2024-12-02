@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <stack>
 #include "tokens.hpp"
 #include "lexical.hpp"
 #include "erros.hpp"
@@ -41,6 +42,14 @@ string erroNaoExisteVariavel = "!!! Variavel nao declarada";
 vector<string> lista_expressao;
 vector<string> posfix; // esta variavel segura a expressão infix para ser traduzida
 
+// Limpa o vetor lista_expressao
+void limpar_lista_expressao() {
+    cout << "entrou limpar" << endl;
+    while (lista_expressao.empty() == false)
+        lista_expressao.pop_back();
+    cout << "limpou" << endl;
+}
+
 Token Lexical(ifstream& codigo, TabelaDeSimbolos& table) {
     Token token = analisadorLexical(codigo,table);
     if (save) {
@@ -52,12 +61,117 @@ Token Lexical(ifstream& codigo, TabelaDeSimbolos& table) {
         }
         lista_expressao.push_back(token.lexema);
     }
+    cout << "saiu lexico" << endl;
     return token;
 }
 
-void conversao_posfixa() {
+vector<string> conversao_posfixa() {
+    cout << "entrou posfixa" << endl;
+    // Função interna para determinar a precedência dos operadores
+    auto precedencia = [](const std::string& op) -> int {
+        if (op == "nao" || op == "-u" || op == "+u")
+            return 4;
+        else if (op == "*" || op == "div")
+            return 3;
+        else if (op == "+" || op == "-")
+            return 2;
+        else if (op == "e")
+            return 1;
+        else if (op == "ou")
+            return 0;
+        else if (op == "=" || op == "!=" || op == "<" || op == "<=" || op == ">" || op == ">=")
+            return -1;
+        else
+            return -2; // Para outros casos
+    };
 
+    // Função interna para verificar se o token é um operador
+    auto isop = [](const std::string& token) -> bool {
+        return token == "+" || token == "-" || token == "*" || token == "div" ||
+               token == "e" || token == "ou" || token == "nao" || token == "-u" || token == "+u" ||
+               token == "=" || token == "!=" || token == "<" || token == "<=" || token == ">" || token == ">=";
+    };
+
+    // Função interna para verificar se o token é um operador unário
+    auto isunary = [](const std::string& op) -> bool {
+        return op == "nao" || op == "-u" || op == "+u";
+    };
+
+    // Função interna para verificar se o token é um operando
+    auto ehOperando = [&](const std::string& token) -> bool {
+        // Aqui você pode adicionar verificações adicionais se necessário
+        return !isop(token) && token != "(" && token != ")";
+    };
+
+    std::vector<std::string> saida;
+    std::stack<std::string> pilha;
+
+    for (size_t i = 0; i < lista_expressao.size(); ++i) {
+        std::string token = lista_expressao[i];
+
+        if (ehOperando(token)) {
+            // Se for um operando, adiciona à saída
+            saida.push_back(token);
+
+            // Verificar se o topo da pilha é um operador unário
+            while (!pilha.empty() && isunary(pilha.top())) {
+                saida.push_back(pilha.top());
+                pilha.pop();
+            }
+        }
+        else if (token == "(") {
+            pilha.push(token);
+        }
+        else if (token == ")") {
+            while (!pilha.empty() && pilha.top() != "(") {
+                saida.push_back(pilha.top());
+                pilha.pop();
+            }
+            if (!pilha.empty() && pilha.top() == "(") {
+                pilha.pop();
+            }
+            else {
+                // ERRO PARENTESES
+            }
+
+            // Após fechar parênteses, verificar por operadores unários
+            while (!pilha.empty() && isunary(pilha.top())) {
+                saida.push_back(pilha.top());
+                pilha.pop();
+            }
+        }
+        else if (isop(token)) {
+            if (isunary(token)) {
+                // Operadores unários são empilhados imediatamente
+                pilha.push(token);
+            }
+            else {
+                while (!pilha.empty() && precedencia(pilha.top()) >= precedencia(token)) {
+                    saida.push_back(pilha.top());
+                    pilha.pop();
+                }
+                pilha.push(token);
+            }
+        }
+        else {
+            // ERRO TOKEN DESCONHECIDO
+        }
+    }
+
+    // Após processar todos os tokens, desempilha os operadores restantes
+    while (!pilha.empty()) {
+        if (pilha.top() == "(" || pilha.top() == ")") {
+            // ERRO PARENTESES NAO BALANCEADOS
+        }
+        saida.push_back(pilha.top());
+        pilha.pop();
+    }
+
+    limpar_lista_expressao();
+    cout << "saiu posfixa" << endl;
+    return saida;
 }
+
 
 string analisa_tipo_semantico() {
 
@@ -65,6 +179,7 @@ string analisa_tipo_semantico() {
 
 // Função para gerar o código da pós fixa
 void gerar_expressao(TabelaDeSimbolos& table){
+    cout << "entrou geração" << endl;
     for(int i = 0; i < int(posfix.size()); i++){
         string item = posfix.at(i);
         //cout << item << endl;
@@ -132,6 +247,7 @@ void gerar_expressao(TabelaDeSimbolos& table){
             }
         }
     }
+    cout << "saiu geração" << endl;
 }
 
 void Analisa_et_variaveis(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table, int &rotulo)
@@ -472,7 +588,7 @@ void Analisa_chamada_funcao(Token &token, ifstream &codigo_fonte, string &lista_
 void Analisa_fator(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table, int &rotulo)
 {
     cout << "bem vindo ao Analisa_fator" << endl;
-    // cout << token.lexema << " " << token.simbolo << " no Analisa_fator" << endl;
+    cout << token.lexema << " " << token.simbolo << " no Analisa_fator" << endl;
     // token = Lexical(codigo_fonte,table);
     if (token.simbolo == "sidentificador")
     {
@@ -551,14 +667,16 @@ void Analisa_termo(Token &token, ifstream &codigo_fonte, string &lista_erros, Ta
     cout << "bem vindo ao Analisa_termo" << endl;
     // cout << "de fora do while do analisa_termo" << endl;
     Analisa_fator(token, codigo_fonte, lista_erros,table,rotulo);
-    
-    while ((token.simbolo == "smult") || (token.simbolo == "sdiv") || (token.simbolo == "se"))
-    {
-        token = Lexical(codigo_fonte,table);
-        // cout << "de dentro do while do analisa_termo" << endl;
-        Analisa_fator(token, codigo_fonte, lista_erros,table,rotulo);
+    cout << "saiu do analisa_fator!" << endl;
+    // while ((token.simbolo == "smult") || (token.simbolo == "sdiv") || (token.simbolo == "se"))
+    // {
+    //     cout << "while?" << endl;
+    //     token = Lexical(codigo_fonte,table);
+    //     // cout << "de dentro do while do analisa_termo" << endl;
+    //     Analisa_fator(token, codigo_fonte, lista_erros,table,rotulo);
 
-    } 
+    // } 
+    cout << "era o while" <<endl;
 }
 
 void Analisa_expressao_simples(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table, int &rotulo)
@@ -684,7 +802,7 @@ void Analisa_se(Token &token, ifstream &codigo_fonte, string &lista_erros, Tabel
         // ERRO DE TIPO ERRADO!
     }
 
-    gera_expressao(table);
+    gerar_expressao(table);
     geraJMPF(aux_rot);
 
 

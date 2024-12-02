@@ -99,8 +99,9 @@ void Analisa_comando_simples(Token &token, ifstream &codigo_fonte, string &lista
 void Analisa_comandos(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table,int& rotulo);
 void Analisa_chamada_procedimento(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table,int& rotulo);
 string analisa_tipo_semantico();
-void conversao_posfixa();
-void gera_expressao(TabelaDeSimbolos& table);
+vector<string> conversao_posfixa();
+void limpar_lista_expressao();
+void gerar_expressao(TabelaDeSimbolos& table);
 Token Lexical(ifstream& codigo, TabelaDeSimbolos& table);
 
 #endif
