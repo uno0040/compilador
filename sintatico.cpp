@@ -315,11 +315,13 @@ void Analisa_chamada_funcao(Token &token, ifstream &codigo_fonte, string &lista_
         bool flag = table.pesquisa_declfunc_tabela(token.lexema);
             if (flag){
                 Analisa_identificador(token, codigo_fonte, lista_erros,table,rotulo);
-                
+                cout << "socorro" << endl;
+                geraCALL(table.locEndMemoria(token.lexema)); // me mude
                 // AQUI PRECISA COLOCAR UM INSERE DO TIPO FUNÇÃO 
                 table.insertAtHead(token.lexema,"funcao",true);
                 // CHECAR AQUI
                 token = analisadorLexical(codigo_fonte,table);
+                cout << "socorro" << endl;
             }
             else{
                 cout << "Analisa CHAMADA FUNCAO ERRO 2" << endl;
@@ -613,14 +615,6 @@ void Analisa_escreva(Token &token, ifstream &codigo_fonte, string &lista_erros, 
             else
             {
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificadorNaoExiste);
-            }
-            token = analisadorLexical(codigo_fonte,table);
-            if (token.simbolo == "sfecha_parenteses") {
-                token = analisadorLexical(codigo_fonte,table);
-            }
-            else {
-                cout << "ha6" << endl;
-                writeErrors(token.linha, codigo_fonte, lista_erros, erroFechamentoDeParenteses);
             }
         }
         else

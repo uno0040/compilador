@@ -105,7 +105,7 @@ bool TabelaDeSimbolos::pesquisa_declvarfunc_tabela(string lexema) {
     Node* temp = head;
 
     while (temp != nullptr) {
-        if (temp->data == lexema && (temp->tipo == "variavel" || temp->tipo == "funcao")) // ALTERAR ESTE IF
+        if (temp->data == lexema && (temp->tipo == "variavel" || temp->tipo == "funcao" || temp->tipo == "funcao inteiro" || temp->tipo == "funcao booleana" || temp->tipo == "sbooleano" || temp->tipo == "sinteiro")) // ALTERAR ESTE IF
             return true;
         temp = temp->next;
     }
@@ -213,6 +213,7 @@ int TabelaDeSimbolos::locEndMemoria(string lexema) {
     while (temp != nullptr) {
         if (temp->data == lexema)
             return temp->memoria;
+        temp = temp->next;
     }    
     return -1;
 }
