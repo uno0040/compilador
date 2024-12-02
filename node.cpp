@@ -76,7 +76,6 @@ Node* TabelaDeSimbolos::pesquisa_tabela(string data) {
 // Insere tipos nas variáveis da tabela
 void TabelaDeSimbolos::coloca_tipo_tabela(string tipo) {
     Node* temp = head;
-    temp = temp->next;
     while (temp != nullptr && temp->tipo == "variavel") {
         temp->tipo = tipo;
         temp = temp->next;
