@@ -748,7 +748,7 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
         writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificadorPrograma);
     }
     token = analisadorLexical(codigo_fonte,table);
-    // cout << token.lexema << " " << token.simbolo << endl;
+    cout << token.lexema << " " << token.simbolo << endl;
     if (!token.isEmpty()) {
         writeErrors(token.linha, codigo_fonte, lista_erros, "!!! Comandos detectados apos o ponto final.");
     }
