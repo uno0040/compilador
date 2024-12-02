@@ -232,3 +232,13 @@ bool TabelaDeSimbolos::pesquisa_declproc_tabela(string lexema) {
     cout << "FAKE" << endl;
     return false;
 }
+
+string TabelaDeSimbolos::pesquisa_tipo_var_tabela(string lexema) {
+    Node* temp = head;
+    while (temp != nullptr) {
+        if (temp->data == lexema && (temp->tipo == "sinteiro" || temp->tipo == "sbooleano")) 
+            return temp->tipo;
+        temp = temp->next;
+    }    
+    return "NaN";
+}

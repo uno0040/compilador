@@ -80,6 +80,10 @@ public:
     // Retorna -1 se não achar o endereço do lexema.
     int locEndMemoria(string lexema);
 
+    // Retorna o tipo da variavel alocada na tabela
+    // Retorna -1 se não achar.
+    string pesquisa_tipo_var_tabela(string lexema);
+
     Node* pop();
 };
 
@@ -94,5 +98,9 @@ void Analisa_expressao(Token &token, ifstream &codigo_fonte, string &lista_erros
 void Analisa_comando_simples(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table,int& rotulo);
 void Analisa_comandos(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table,int& rotulo);
 void Analisa_chamada_procedimento(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table,int& rotulo);
+string analisa_tipo_semantico();
+void conversao_posfixa();
+void gera_expressao(TabelaDeSimbolos& table);
+Token Lexical(ifstream& codigo, TabelaDeSimbolos& table);
 
 #endif
