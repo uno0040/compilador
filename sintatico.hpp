@@ -16,11 +16,12 @@ public:
     string tipo;
     bool escopo;
     int memoria;
+    int rotulo;
     // Ponteiro para o próximo nó
     Node* next;
 
     // Construtor do nó
-    Node(string data, string tipo = "", bool escopo = false, int memoria = 99999999);
+    Node(string data, string tipo = "", bool escopo = false, int memoria = 99999999, int rotulo = -1);
 };
 
 // Declaração da classe TabelaDeSimbolos
@@ -32,7 +33,7 @@ public:
     TabelaDeSimbolos();
 
     // Insere um identificador no topo da pilha (insere_tabela)
-    void insertAtHead(string data, string tipo = "", bool escopo = false, int memoria = -1);
+    void insertAtHead(string data, string tipo = "", bool escopo = false, int memoria = -1, int rotulo = -1);
 
     // Retorna a primeira declaracao do item buscado
     Node* pesquisa_tabela(string data);

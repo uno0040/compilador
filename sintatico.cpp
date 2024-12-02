@@ -151,7 +151,9 @@ void Analisa_declaracao_procedimento(Token &token, ifstream &codigo_fonte, strin
     if (token.simbolo == "sidentificador")
     {
         if (!table.pesquisa_declproc_tabela(token.lexema)) {
-            table.insertAtHead(token.lexema, "procedimento", true /*, texto em vermelho*/);
+            table.insertAtHead(token.lexema, "procedimento", true, rotulo);
+            geraNULL(rotulo);
+            rotulo++;
             token = analisadorLexical(codigo_fonte,table);
             if (token.simbolo == "sponto_virgula")
             {
@@ -163,8 +165,10 @@ void Analisa_declaracao_procedimento(Token &token, ifstream &codigo_fonte, strin
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
             }
         }
+
         else {
-            // ERRO
+            cout << "Analisa_declaracao_procedimento" << endl;
+            writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         }
     }
     else
@@ -195,7 +199,7 @@ void Analisa_declaracao_funcao(Token &token, ifstream &codigo_fonte, string &lis
             // Tem que implementar um insertAt do tipo procedimento (ele não vai ter memoria por exemplo)
             // mas eu n sei o que é nivel 
             // provavelmente vamos precisar de uma variavel global ?
-            table.insertAtHead(token.lexema, "",true /*, parte em vermelho*/);
+            table.insertAtHead(token.lexema, "",true , rotulo);
             token = analisadorLexical(codigo_fonte,table);
             if (token.simbolo == "sdoispontos") {
                 token = analisadorLexical(codigo_fonte,table);
@@ -300,12 +304,15 @@ void Analisa_chamada_funcao(Token &token, ifstream &codigo_fonte, string &lista_
         // AMIGAO TA ERRADO AQUI 
         // PRECISAMOS DE UMA BUSCA DO TIPO DECLARAÇAO DE FUNCAO 
         // PROCURA ATÉ ACHAR UM NOME MARCADO , SE FOR DIFERENTE IRMÃO RETORNA TRUE NESSA PORR
+        cout << "token entrando na pesquisa declfunc tabela" << endl;
+        cout << token.lexema << " " << token.simbolo << endl;
         bool flag = table.pesquisa_declfunc_tabela(token.lexema);
             if (!flag){
                 Analisa_identificador(token, codigo_fonte, lista_erros,table,rotulo);
                 
                 // AQUI PRECISA COLOCAR UM INSERE DO TIPO FUNÇÃO 
-
+                table.insertAtHead(token.lexema,"funcao",true);
+                // CHECAR AQUI
                 token = analisadorLexical(codigo_fonte,table);
                 if (token.simbolo == "sdoispontos")
                 {
@@ -330,6 +337,7 @@ void Analisa_chamada_funcao(Token &token, ifstream &codigo_fonte, string &lista_
             token = analisadorLexical(codigo_fonte,table);
             }
             else{
+                cout << "Analisa CHAMADA FUNCAO ERRO 2" << endl;
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroDoisPontos);
             }
 
@@ -360,7 +368,8 @@ void Analisa_fator(Token &token, ifstream &codigo_fonte, string &lista_erros, Ta
                 token = analisadorLexical(codigo_fonte,table);
         }
         else {
-            // ERRO
+            cout << "Analisa fator" << endl;
+            writeErrors(token.linha, codigo_fonte, lista_erros, erroDoisPontos); //  não é esse erro kkkk
         }
         Analisa_chamada_funcao(token, codigo_fonte, lista_erros,table,rotulo);
     }
