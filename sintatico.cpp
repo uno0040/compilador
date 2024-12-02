@@ -665,19 +665,43 @@ void Analisa_se(Token &token, ifstream &codigo_fonte, string &lista_erros, Tabel
 {
     cout << "bem vindo ao Analisa_se" << endl;
     token = Lexical(codigo_fonte,table);
-    // cout << "pos se" << endl;
-    // cout << token.lexema << " " << token.simbolo << endl;
+    int aux_rot = rotulo;
+    bool flag_senao = false;
+    rotulo++;
+    int aux_rot1;
+    
+    save = true;
+    lista_expressao.push_back(token.lexema);
+
     Analisa_expressao(token, codigo_fonte, lista_erros,table,rotulo);
-    // cout << "decimo quinto cout" << endl;
-    // cout << token.lexema << " " << token.simbolo << endl;
+
+    save = false;
+    lista_expressao.pop_back(); //remove ;
+
+    string tipo = analisa_tipo_semantico();
+
+    if (tipo != "sbooleano") {
+        // ERRO DE TIPO ERRADO!
+    }
+
+    gera_expressao(table);
+    geraJMPF(aux_rot);
+
+
     if (token.simbolo == "sentao") {
         token = Lexical(codigo_fonte,table);
         Analisa_comando_simples(token, codigo_fonte, lista_erros,table,rotulo);
         if (token.simbolo == "ssenao") {
-            cout << "SENAO OQ???" << endl;
+            flag_senao = true;
+            aux_rot1 = rotulo;
+            rotulo++;
             token = Lexical(codigo_fonte,table);
             Analisa_comando_simples(token, codigo_fonte, lista_erros,table,rotulo);    
         }
+        if(!flag_senao)
+            geraNULL(aux_rot);
+        else
+            geraNULL(aux_rot1);
     }
     else {
         writeErrors(token.linha, codigo_fonte, lista_erros, erroEsperaEntao);
