@@ -11,9 +11,13 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        cerr << "Uso: " << argv[0] << " <arquivo_codigo_fonte>" << endl;
+        return 1;   
+    }
     
-    string filename = "oi.txt";
+    string filename = argv[1];
     ifstream Codigo_fonte(filename);
     int linha = 1;
     // Limpa ou cria se não tiver criado o arquivo saida.txt

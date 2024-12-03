@@ -5,7 +5,7 @@ import subprocess
 class EditorTexto:
     def __init__(self, root):
         self.root = root
-        self.root.title("Editor de Texto")
+        self.root.title("Compilador")
         self.text_area = tk.Text(self.root, wrap='word', undo=True)
         self.text_area.pack(fill=tk.BOTH, expand=1)
 
@@ -49,13 +49,17 @@ class EditorTexto:
             return
         try:
             self.salvar_arquivo()  # Salvar alterações antes de compilar
-            result = subprocess.run(["compilador.exe", self.file_path], text=True, capture_output=True)
+            result = subprocess.run(
+                ["compilador.exe", self.file_path],  # Passa o nome do arquivo como argumento
+                text=True, capture_output=True
+            )
             output = f"Saída:\n{result.stdout}\n\nErros:\n{result.stderr}"
         except FileNotFoundError:
             output = "Erro: O arquivo 'compilador.exe' não foi encontrado."
         except Exception as e:
             output = f"Erro ao executar o compilador: {e}"
         self.mostrar_saida(output)
+
 
     def mostrar_saida(self, output):
         self.output_area.config(state='normal')

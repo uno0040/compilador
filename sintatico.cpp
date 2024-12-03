@@ -221,18 +221,18 @@ string analisa_tipo_semantico(TabelaDeSimbolos& table) {
                 if (tipoOperando1 == "sinteiro" && tipoOperando2 == "sinteiro") {
                     tipoResultado = "sbooleano";
                 } else {
-                    cout << "Erro semântico: Operador '" << token << "' requer operandos inteiros." << endl;
+                    cerr << "Erro semântico: Operador '" << token << "' requer operandos inteiros." << endl;
                     exit(EXIT_FAILURE);
                 }
             } else if (token == "e" || token == "ou") {
                 if (tipoOperando1 == "sbooleano" && tipoOperando2 == "sbooleano") {
                     tipoResultado = "sbooleano";
                 } else {
-                    cout << "Erro semântico: Operador '" << token << "' requer operandos booleanos." << endl;
+                    cerr << "Erro semântico: Operador '" << token << "' requer operandos booleanos." << endl;
                     exit(EXIT_FAILURE);
                 }
             } else {
-                cout << "Erro: Operador desconhecido '" << token << "'." << endl;
+                cerr << "Erro: Operador desconhecido '" << token << "'." << endl;
                 exit(EXIT_FAILURE);
             }
             
@@ -240,7 +240,7 @@ string analisa_tipo_semantico(TabelaDeSimbolos& table) {
         } else if (token == "nao" || token == "-u" || token == "+u") {
             // Operadores unários
             if (pilha.empty()) {
-                cout << "Erro: Operador '" << token << "' requer um operando." << endl;
+                cerr << "Erro: Operador '" << token << "' requer um operando." << endl;
                 exit(EXIT_FAILURE);
             }
             string tipoOperando = pilha.top(); pilha.pop();
@@ -251,18 +251,18 @@ string analisa_tipo_semantico(TabelaDeSimbolos& table) {
                 if (tipoOperando == "sinteiro") {
                     tipoResultado = "sinteiro";
                 } else {
-                    cout << "Erro semântico: Operador '" << token << "' requer operando inteiro." << endl;
+                    cerr << "Erro semântico: Operador '" << token << "' requer operando inteiro." << endl;
                     exit(EXIT_FAILURE);
                 }
             } else if (token == "nao") {
                 if (tipoOperando == "sbooleano") {
                     tipoResultado = "sbooleano";
                 } else {
-                    cout << "Erro semântico: Operador '" << token << "' requer operando booleano." << endl;
+                    cerr << "Erro semântico: Operador '" << token << "' requer operando booleano." << endl;
                     exit(EXIT_FAILURE);
                 }
             } else {
-                cout << "Erro: Operador desconhecido '" << token << "'." << endl;
+                cerr << "Erro: Operador desconhecido '" << token << "'." << endl;
                 exit(EXIT_FAILURE);
             }
             
@@ -283,7 +283,7 @@ string analisa_tipo_semantico(TabelaDeSimbolos& table) {
             } else if (table.pesquisa_declprocfunc_tabela(token)) {
                 string tipo = table.pesquisa_tipoprocfunc_tabela(token);
                 if(tipo == "sprocedimento"){
-                    cout << "Erro semantico: Identificador '" << token << "' utilizado como variavel, mas e um procedimento." << endl;
+                    cerr << "Erro semantico: Identificador '" << token << "' utilizado como variavel, mas e um procedimento." << endl;
                     exit(EXIT_FAILURE);
                 }
                 else{
@@ -292,14 +292,14 @@ string analisa_tipo_semantico(TabelaDeSimbolos& table) {
                 
             } else {
                 // Identificador não declarado
-                cout << "Erro semântico: Variável '" << token << "' não declarada." << endl;
+                cerr << "Erro semântico: Variável '" << token << "' não declarada." << endl;
                 exit(EXIT_FAILURE);
             }
         }
     }
     
     if (pilha.size() != 1) {
-        cout << "Erro: Expressão inválida, pilha de tipos inconsistente." << endl;
+        cerr << "Erro: Expressão inválida, pilha de tipos inconsistente." << endl;
         exit(EXIT_FAILURE);
     }
     
@@ -404,6 +404,7 @@ void Analisa_et_variaveis(Token &token, ifstream &codigo_fonte, string &lista_er
                 else
                 {
                     // erro de ponto e virgula <etapa de declaração de variaveis>
+                    cerr << "Erro de ponto e virgula" << endl;
                     writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
                     exit(0);
                 }
@@ -419,6 +420,8 @@ void Analisa_et_variaveis(Token &token, ifstream &codigo_fonte, string &lista_er
         {
             // Erro espera-se identificador <etapa de declaração de variaveis>
             // cout << "analisa_et_variaveis" << endl;
+            cerr << "Erro de identificador" << endl;
+            exit(-1);
             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         }
     }
@@ -439,6 +442,8 @@ void Analisa_identificador(Token &token, ifstream &codigo_fonte, string &lista_e
     // cout << "bem vindo ao Analisa_identificador" << endl;
     // :D
     if (!isalpha(token.lexema[0])) {
+        cerr << "Erro de sintaxe do identificador." << endl;
+        exit(-1);
         writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificadorInvalidoProc);
     } 
 }
@@ -448,6 +453,8 @@ void Analisa_Tipo(Token &token, ifstream &codigo_fonte, string &lista_erros, Tab
     // cout << "bem vindo ao Analisa_Tipo" << endl;
     if (token.simbolo != "sinteiro" && token.simbolo != "sbooleano")
     {
+        cerr << "Tipo inválido." << endl;
+        exit(0);
         writeErrors(token.linha, codigo_fonte, lista_erros, erroTipoInvalido);
     }
     else
@@ -477,6 +484,8 @@ void AnalisaVariaveis(Token &token, ifstream &codigo_fonte, string &lista_erros,
 
                             if (token.simbolo == "sdoispontos") {
                                 // Erro encontrou um dois pontos aos inves de um identificador <analisa_variaveis>
+                                cerr << "Esperava-se identificador, encontrou dois pontos." << endl;
+                                exit(-1);
                                 writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
                             }
 
@@ -484,14 +493,20 @@ void AnalisaVariaveis(Token &token, ifstream &codigo_fonte, string &lista_erros,
 
                     } else {
                         // Erro para eseperar pontuação <analisa_variaveis>
+                        cerr << "Erro de pontuação." << endl;
+                        exit(-1);
                         writeErrors(token.linha, codigo_fonte, lista_erros,erroPontuacao);
                     }
 
                 } else {
+                    cerr << "Declaração duplicada de variável." << endl;
+                    exit(-1);
                     writeErrors(token.linha, codigo_fonte, lista_erros, erroDuplicidadeDecaracao);
                 }      
         } else {
             // Erro de esperar um identificador <analisa_variaveis>
+            cerr << "Esperava-se identificador." << endl;
+            exit(-1);
             writeErrors(token.linha, codigo_fonte, lista_erros,erroIdentificador);
         }
     } while (token.simbolo != "sdoispontos");
@@ -534,6 +549,7 @@ void Analisa_declaracao_procedimento(Token &token, ifstream &codigo_fonte, strin
             {
                 // erro de pontuação ponto_virgula
                 // cout << "decl_proc" << endl;
+                cerr << "Esperava-se ponto e vírgula." << endl;
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
                 exit(0);
             }
@@ -541,6 +557,7 @@ void Analisa_declaracao_procedimento(Token &token, ifstream &codigo_fonte, strin
 
         else {
             // cout << "Analisa_declaracao_procedimento" << endl;
+            cerr << "Erro de identificador." << endl;
             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         }
     }
@@ -548,6 +565,7 @@ void Analisa_declaracao_procedimento(Token &token, ifstream &codigo_fonte, strin
     {
         // ERRO NAO TEM IDENTIFICADOR
         // cout << "Analisa_declaracao_procedimento" << endl;
+        cerr << "Esperava-se identificador." << endl;
         writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         // RETIRAR O GALHO DA TABELA DE SIMBOLOS
     }
@@ -610,19 +628,26 @@ void Analisa_declaracao_funcao(Token &token, ifstream &codigo_fonte, string &lis
                     }
                 }
                 else {
+                    cerr << "Tipo inválido." << endl;
+                    exit(-1);
                     writeErrors(token.linha, codigo_fonte, lista_erros, erroTipoInvalido);
                 }
             }
             else {
+                cerr << "Esperava-se dois pontos." << endl;
+                exit(-1);
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroDoisPontos);
             }
 
         }else{
+            cerr << "Declaração duplicada de função." << endl;
+            exit(-1);
             writeErrors(token.linha, codigo_fonte, lista_erros, erroDuplicidadeDecaracao);
         }
     }
     else {
-   
+        cerr << "Erro de identificador." << endl;
+        exit(-1);
         writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         table.pop();
     }
@@ -652,8 +677,9 @@ void Analisa_subrotinas(Token &token, ifstream &codigo_fonte, string &lista_erro
         }
         else {
             // cout << "subrotinas" << endl;
+            cerr << "Espera-se ponto e vírgula." << endl;
+            exit(-1);
             writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
-            exit(0);
         }
     }
     if (flag == 1) {
@@ -678,7 +704,7 @@ void Analisa_atribuicao(Token &token, ifstream &codigo_fonte, string &lista_erro
         string expressao_tipo = analisa_tipo_semantico(table);
 
         if (expressao_tipo != var_tipo) {
-            cout << "Tipo não compatível de expressão atribuída a variável!" << endl;
+            cerr << "Tipo não compatível de expressão atribuída a variável!" << endl;
             exit(-1);
         }
         // GERA CODIGO
@@ -696,7 +722,7 @@ void Analisa_atribuicao(Token &token, ifstream &codigo_fonte, string &lista_erro
         string expressao_tipo = analisa_tipo_semantico(table);
 
         if (expressao_tipo != var_tipo) {
-            cout << "Tipo não compatível de expressão atribuída a variável!" << endl;
+            cerr << "Tipo não compatível de expressão atribuída a variável!" << endl;
             exit(-1);
         }
         // GERA CODIGO
@@ -711,7 +737,7 @@ void Chamada_procedimento(Token &token, ifstream &codigo_fonte, string &lista_er
 {
     int aux = table.rotulo_funcao(token_passado.lexema);
     if (aux == -1) {
-        cout << "Procedimento não existe." << endl;
+        cerr << "Procedimento não existe." << endl;
         exit(-1);
     }
 
@@ -723,7 +749,7 @@ void Chamada_procedimento(Token &token, ifstream &codigo_fonte, string &lista_er
 void Analisa_chamada_funcao(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table, int &rotulo) {
     int aux = table.rotulo_funcao(token.lexema);
     if (aux == -1) {
-        cout << "Funcao não existe." << endl;
+        cerr << "Funcao não existe." << endl;
         exit(-1);
     }
     geraCALL(aux);
@@ -748,9 +774,9 @@ void Analisa_fator(Token &token, ifstream &codigo_fonte, string &lista_erros, Ta
         }
         else {
             // cout << "Analisa fator" << endl;
-            cout << "Identificador ou função não ainda declarada." << endl;
+            cerr << "Identificador ou função não ainda declarada." << endl;
             writeErrors(token.linha, codigo_fonte, lista_erros, erroDoisPontos); //  não é esse erro kkkk
-            exit(0);
+            exit(-1);
         }
     }
     else { 
@@ -786,6 +812,8 @@ void Analisa_fator(Token &token, ifstream &codigo_fonte, string &lista_erros, Ta
                     else {
                         // cout << "ha1" << endl;
                         // cout << token.lexema << " " << token.simbolo << endl;
+                        cerr << "Parenteses não fechados." << endl;
+                        exit(-1);
                         writeErrors(token.linha, codigo_fonte, lista_erros, erroFechamentoDeParenteses);        
                     }
                 }   
@@ -799,6 +827,8 @@ void Analisa_fator(Token &token, ifstream &codigo_fonte, string &lista_erros, Ta
                     else {
                         // cout << "ha2" << endl;
                         // cout << token.lexema << " " << token.simbolo << endl;
+                        cerr << "Parenteses não fechados." << endl;
+                        exit(-1);
                         writeErrors(token.linha, codigo_fonte, lista_erros, erroFechamentoDeParenteses); // me mude :c
                         // OLHA PARA MIM
                         // SOCORRO
@@ -868,8 +898,9 @@ void Analisa_chamada_procedimento(Token &token, ifstream &codigo_fonte, string &
         token = Lexical(codigo_fonte,table);
         if (token.simbolo != "sponto_virgula") {
             // cout << "analisa_Chamada_procedimento" << endl;
+            cerr << "Esperava-se ponto e vírgula." << endl;
+            exit(-1);
             writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
-            exit(0);
         }
     }
 }
@@ -915,7 +946,7 @@ void Analisa_enquanto(Token &token, ifstream &codigo_fonte, string &lista_erros,
     string exp_bool_tipo = analisa_tipo_semantico(table);
     
     if (exp_bool_tipo != "sbooleano") {
-        cout << "Enquanto esperava expressão booleana, recebeu: " << exp_bool_tipo << endl;
+        cerr << "Enquanto esperava expressão booleana, recebeu: " << exp_bool_tipo << endl;
         exit(-1);
     }
     gerar_expressao(table);
@@ -937,7 +968,7 @@ void Analisa_enquanto(Token &token, ifstream &codigo_fonte, string &lista_erros,
     }
     else
     {
-        cout << "Esperava-se 'faca' após enquanto." << endl;
+        cerr << "Esperava-se 'faca' após enquanto." << endl;
         exit(-1);
     }
 }
@@ -961,7 +992,8 @@ void Analisa_se(Token &token, ifstream &codigo_fonte, string &lista_erros, Tabel
     string tipo = analisa_tipo_semantico(table);
 
     if (tipo != "sbooleano") {
-        // ERRO DE TIPO ERRADO!
+        cerr << "Esperava-se tipo booleano." << endl;
+        exit(-1);
     }
 
     gerar_expressao(table);
@@ -1011,20 +1043,26 @@ void Analisa_leia(Token &token, ifstream &codigo_fonte, string &lista_erros, Tab
                         token = Lexical(codigo_fonte,table);
                     }
                 } else {
-                    cout << "Variavel no leia deve ser do tipo inteiro." << endl;
+                    cerr << "Variavel no leia deve ser do tipo inteiro." << endl;
                     exit(-1);
                 }
             } 
             else{
+                cerr << "Variável não existe." << endl;
+                exit(-1);
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroNaoExisteVariavel);
             }
             
         }
         else {
+            cerr << "Parênteses não balanceados." << endl;
+            exit(-1);
             writeErrors(token.linha, codigo_fonte, lista_erros, erroFechamentoDeParenteses);
         }
     }
     else {
+        cerr << "Parênteses não balanceados." << endl;
+        exit(-1);
         writeErrors(token.linha, codigo_fonte, lista_erros, erroFechamentoDeParenteses);
     }
 }
@@ -1056,24 +1094,32 @@ void Analisa_escreva(Token &token, ifstream &codigo_fonte, string &lista_erros, 
                     geraPRN();
                 }
                 else
-                {
+                {   
+                    cerr << "Parênteses não balanceados." << endl;
+                    exit(-1);   
                     writeErrors(token.linha, codigo_fonte, lista_erros, erroFechamentoDeParenteses);
                 }
             }
             else
             {
+                cerr << "Identificador não declarado." << endl;
+                exit(-1);
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificadorNaoExiste);
             }
         }
         else
         {
             // cout << "Analisa_escreva" << endl;
+            cerr << "Esperava-se identificador." << endl;
+            exit(-1);
             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         }
     }
     else
     {
         // cout << "ha7" << endl;
+        cerr << "Parênteses não balanceados." << endl;
+        exit(-1);
         writeErrors(token.linha, codigo_fonte, lista_erros, erroFechamentoDeParenteses);
     }
 }
@@ -1134,8 +1180,9 @@ void Analisa_comandos(Token &token, ifstream &codigo_fonte, string &lista_erros,
             else {
                 // cout << "analisa_comandos" << endl;
                 // cout << token.lexema << " " << token.simbolo << endl;
+                cerr << "Esperava-se ponto e vírgula." << endl;
+                exit(-1);
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
-                exit(0);
                 break;
             }
         }
@@ -1145,6 +1192,8 @@ void Analisa_comandos(Token &token, ifstream &codigo_fonte, string &lista_erros,
         // cout << token.lexema << " dentro do while " << token.simbolo << endl;
     }
     else {
+        cerr << "Esperava-se início." << endl;
+        exit(-1);
         writeErrors(token.linha, codigo_fonte, lista_erros, erroInicio);
     }
 }
@@ -1193,6 +1242,8 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
                     // Erro de ponto final <programa>
                     // cout << "sdfujibghnwdf8iougberg" << endl;
                     // cout << token.lexema << " " << token.simbolo << endl;
+                    cerr << "Esperava-se ponto final." << endl;
+                    exit(-1);
                     writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoFinal);
                 }
             }
@@ -1200,6 +1251,8 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
             {
                 // Erro de ponto-virgula <programa>
                 // cout << "main" << endl;
+                cerr << "Esperava-se ponto e vírgula." << endl;
+                exit(-1);
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
                 exit(0);
             }
@@ -1208,12 +1261,16 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
         {
             // Erro do identificador <programa>
             // cout << "main" << endl;
+            cerr << "Esperava-se identificador programa." << endl;
+            exit(-1);
             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificadorPrograma);
         }
     }
     else
     {
         // Primeiro erro da regra Analisador sintatico <programa>
+        cerr << "Esperava-se identificador programa." << endl;
+        exit(-1);
         writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificadorPrograma);
     }
 }
