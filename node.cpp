@@ -11,6 +11,7 @@ Node::Node(string data, string tipo, bool escopo, int memoria, int rotulo)
     this->tipo = tipo;
     this->escopo = escopo;
     this->memoria = memoria;
+    this->rotulo = rotulo;
     this->next = nullptr;
 }
 
@@ -63,6 +64,7 @@ bool TabelaDeSimbolos::pesquisa_tabela_simples(string data) {
 
 // Retorna a primeira declaracao do item buscado
 Node* TabelaDeSimbolos::pesquisa_tabela(string data) {
+    display();
     Node* temp = head;
     Node* r = nullptr;
     while (temp != nullptr) {
@@ -85,14 +87,10 @@ void TabelaDeSimbolos::coloca_tipo_tabela(string tipo) {
 // Busca se há mais de uma váriavel com este lexema na tabela de símbolos    
 // Retorna true se for encontrada, false se não for.
 bool TabelaDeSimbolos::pesquisa_duplicvar_tabela(string lexema) {
-
-    int contador = 0;
     Node* temp = head;
 
     while (temp != nullptr && temp->escopo == false) {
         if (temp->data == lexema && temp->tipo == "variavel")
-            contador++;
-        if (contador >= 2)
             return true;
         temp = temp->next;
     }
@@ -138,7 +136,7 @@ void TabelaDeSimbolos::display() {
     }
     cout << "====================" << endl;
     while (temp != nullptr) {
-        cout << "Identificador: " << temp->data << ", Tipo: " << temp->tipo << endl;
+        cout << "Identificador: " << temp->data << ", Tipo: " << temp->tipo << ", Escopo: " << temp->escopo << ", Memoria: " << temp->memoria << ", Rotulo: " << temp->rotulo << endl;
         temp = temp->next;
         tam++;
     }
@@ -159,13 +157,35 @@ Node* TabelaDeSimbolos::pop() {
 
 // Desempilha o escopo atual
 void TabelaDeSimbolos::desempilhar_escopo() {
+    cout << endl;
+    cout << "desempilhar_escopo chamado" << endl;
+    cout << endl;
     while (head != nullptr && head->escopo != true) {
         Node* temp = head;
+        cout << "!DESEMPILHANDO " << head->data << " " << head->escopo <<endl;
         head = head->next;
         delete temp;
     }
+    if (head != nullptr) {
+    head->escopo = false;
+    }
 }
 
+// Busca se tem uma outra função declarada com este nome
+string TabelaDeSimbolos::pesquisa_tipoprocfunc_tabela(string lexema) {
+    Node* temp = head;
+    cout << "procurando: "<< lexema << endl;
+    while (temp != nullptr) {
+        if (temp->data == lexema && temp->tipo == "funcao booleana")
+            return "sbooleano";
+        if (temp->data == lexema && temp->tipo == "funcao inteiro")
+            return "sinteiro";
+        if (temp->data == lexema && temp->tipo == "procedimento")
+            return "procedimento";
+        temp = temp->next;
+    }
+    return "NaN";
+}
 
 // Busca se tem uma outra função declarada com este nome
 bool TabelaDeSimbolos::pesquisa_declfunc_tabela(string lexema) {
@@ -174,6 +194,20 @@ bool TabelaDeSimbolos::pesquisa_declfunc_tabela(string lexema) {
     cout << "procurando: "<< lexema << endl;
     while (temp != nullptr) {
         if (temp->data == lexema && (temp->tipo == "funcao" || temp->tipo == "funcao inteiro" || temp->tipo == "funcao booleana"))
+            return true;
+        temp = temp->next;
+    }
+    cout << "nao achei" << endl;
+    return false;
+}
+
+// Busca se tem uma outra função declarada com este nome
+bool TabelaDeSimbolos::pesquisa_declprocfunc_tabela(string lexema) {
+    display();
+    Node* temp = head;
+    cout << "procurando: "<< lexema << endl;
+    while (temp != nullptr) {
+        if (temp->data == lexema && (temp->tipo == "funcao" || temp->tipo == "funcao inteiro" || temp->tipo == "funcao booleana" || temp->tipo == "procedimento"))
             return true;
         temp = temp->next;
     }
@@ -219,26 +253,47 @@ int TabelaDeSimbolos::locEndMemoria(string lexema) {
 }
 
 bool TabelaDeSimbolos::pesquisa_declproc_tabela(string lexema) {
-    // display();
+    // cout << "PESQUISA_DECLPROC_TABELA ASJNHIEOABGHURBGHUERBHUBEQ" << endl;
+    display();
     Node* temp = head;
-    cout << "procurando: "<< lexema << endl;
+    // cout << "procurando: "<< lexema << endl;
     while (temp != nullptr) {
         if (temp->data == lexema && (temp->tipo == "procedimento")) {
-            cout << "NAO SOU FKA" << endl;
+            // cout << "NAO SOU FKA" << endl;
             return true;
         }
         temp = temp->next;
     }
-    cout << "FAKE" << endl;
+    // cout << "FAKE" << endl;
     return false;
 }
 
 string TabelaDeSimbolos::pesquisa_tipo_var_tabela(string lexema) {
     Node* temp = head;
     while (temp != nullptr) {
-        if (temp->data == lexema && (temp->tipo == "sinteiro" || temp->tipo == "sbooleano")) 
+        if (temp->data == lexema && (temp->tipo == "sinteiro" || temp->tipo == "sbooleano" || temp->tipo == "funcao inteiro" || temp->tipo == "funcao booleana")) {
+            if (temp->tipo == "funcao inteiro" || temp->tipo == "funcao booleana") {
+                if (temp->tipo == "funcao inteiro")
+                    return "sinteiro";
+                else
+                    return "sbooleano";
+            }
             return temp->tipo;
+        }
         temp = temp->next;
     }    
     return "NaN";
+}
+
+int TabelaDeSimbolos::rotulo_funcao(string funcao) {
+    Node* temp = head;
+    // cout << "procurando: "<< lexema << endl;
+    while (temp != nullptr) {
+        if (temp->data == funcao && (temp->tipo == "funcao inteiro" || temp->tipo == "funcao booleana" || temp->tipo == "procedimento")) {
+            // cout << "NAO SOU FKA" << endl;
+            return temp->rotulo;
+        }
+        temp = temp->next;
+    }
+    return -1;
 }

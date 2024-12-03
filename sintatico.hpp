@@ -40,6 +40,9 @@ public:
 
     // Busca a pilha pela declaração de procedimento
     bool pesquisa_declproc_tabela(string lexema);
+    
+    // Busca declaração de procedimento ou funcção
+    bool pesquisa_declprocfunc_tabela(string lexema);
 
     // Busca pela pilha só pelo lexema
     bool pesquisa_tabela_simples(string data);
@@ -84,6 +87,10 @@ public:
     // Retorna -1 se não achar.
     string pesquisa_tipo_var_tabela(string lexema);
 
+    string pesquisa_tipoprocfunc_tabela(string lexema);
+
+    int rotulo_funcao(string funcao);
+
     Node* pop();
 };
 
@@ -98,7 +105,7 @@ void Analisa_expressao(Token &token, ifstream &codigo_fonte, string &lista_erros
 void Analisa_comando_simples(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table,int& rotulo);
 void Analisa_comandos(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table,int& rotulo);
 void Analisa_chamada_procedimento(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table,int& rotulo);
-string analisa_tipo_semantico();
+string analisa_tipo_semantico(TabelaDeSimbolos& table);
 vector<string> conversao_posfixa();
 void limpar_lista_expressao();
 void gerar_expressao(TabelaDeSimbolos& table);

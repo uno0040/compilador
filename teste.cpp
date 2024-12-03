@@ -12,25 +12,12 @@ using namespace std;
 
 int main() {
     
-    string filename = "oi.txt";
-    ifstream Codigo_fonte(filename);
-    
-
-    // Erro de abertura de arquivo 
-    if (!Codigo_fonte.is_open()) {
-        cerr << "Erro ao abrir o arquivo!" << endl;
-        return 1;
-    }
-    TabelaDeSimbolos table;
-    Token inicio;
-    int cont = 0;
-    // Compilando o codigo fonte 
-    while (!Codigo_fonte.eof()) {
-        cont++;
-        inicio = analisadorLexical(Codigo_fonte,table); 
-        // analisadorSintatico(inicio)
-        // table.display();
-    }
-    cout << cont << " itens analisados :P" << endl;
+    vector<int> t;
+    t.push_back(1);
+    t.push_back(2);
+    cout << t.back() << endl;
+    t.pop_back();
+    cout << t.back() << endl;
+    t.pop_back();
     return 0;
 }

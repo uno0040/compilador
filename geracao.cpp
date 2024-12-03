@@ -18,7 +18,7 @@ inline bool arquivo_existe () {
     return f.good();
 }
 
-void geraLDC(int val){
+void geraLDC(string val){
     ofstream arquivo("saida.txt", ios::app);
     arquivo << "    " << left << setw(8) << "LDC" << val << "\n";
     arquivo.close();
@@ -128,7 +128,7 @@ void geraJMP(int val){
 
 void geraJMPF(int val){
     ofstream arquivo("saida.txt", ios::app);
-    arquivo << "    " << left << setw(8) << "JMP" << val << "\n";
+    arquivo << "    " << left << setw(8) << "JMPF" << val << "\n";
     arquivo.close();
 }
 
@@ -178,7 +178,7 @@ void geraHLT() {
 
 void geraCALL(int val) {
     ofstream arquivo("saida.txt", ios::app);
-    arquivo << left << setw(4) << val << "CALL" << "\n";
+    arquivo << "    " << left << setw(8) << "CALL" << val << "\n";
     arquivo.close();
 }
 

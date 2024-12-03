@@ -10,7 +10,7 @@ using namespace std;
 
 void limpar_arquivo();
 inline bool arquivo_existe();
-void geraLDC(int val);
+void geraLDC(string val);
 void geraLDV(int val);
 void geraADD();
 void geraSUB();
