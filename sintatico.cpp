@@ -47,10 +47,8 @@ vector<int> alocacoes;
 
 // Limpa o vetor lista_expressao
 void limpar_lista_expressao() {
-    cout << "entrou limpar" << endl;
     while (lista_expressao.empty() == false)
         lista_expressao.pop_back();
-    cout << "limpou" << endl;
 }
 
 Token Lexical(ifstream& codigo, TabelaDeSimbolos& table) {
@@ -69,7 +67,7 @@ Token Lexical(ifstream& codigo, TabelaDeSimbolos& table) {
 }
 
 vector<string> conversao_posfixa() {
-    cout << "entrou posfixa" << endl;
+    // cout << "entrou posfixa" << endl;
     // Função interna para determinar a precedência dos operadores
     auto precedencia = [](const std::string& op) -> int {
         if (op == "nao" || op == "-u" || op == "+u")
@@ -171,19 +169,19 @@ vector<string> conversao_posfixa() {
     }
 
     limpar_lista_expressao();
-    cout << "saiu posfixa" << endl;
+    // cout << "saiu posfixa" << endl;
     return saida;
 }
 
 
 string analisa_tipo_semantico(TabelaDeSimbolos& table) {
     posfix = conversao_posfixa();
-    cout << "pos fixo" << endl;
-    cout << "-=-=-=-=-=-=-=-=-=-" << endl;
-    for (size_t i = 0; i < posfix.size(); ++i) {
-        cout << posfix[i] << endl;
-    }
-    cout << "-=-=-=-=-=-=-=-=-=-" << endl;
+    // cout << "pos fixo" << endl;
+    // cout << "-=-=-=-=-=-=-=-=-=-" << endl;
+    // for (size_t i = 0; i < posfix.size(); ++i) {
+    //     cout << posfix[i] << endl;
+    // }
+    // cout << "-=-=-=-=-=-=-=-=-=-" << endl;
     // Imprimir a expressão pós-fixa para depuração
 
     /*cout << "Expressao posfixa: ";
@@ -312,7 +310,6 @@ string analisa_tipo_semantico(TabelaDeSimbolos& table) {
 
 // Função para gerar o código da pós fixa
 void gerar_expressao(TabelaDeSimbolos& table){
-    cout << "entrou geração" << endl;
     for(int i = 0; i < int(posfix.size()); i++){
         string item = posfix.at(i);
         int endereco = table.locEndMemoria(item);
@@ -385,7 +382,6 @@ void gerar_expressao(TabelaDeSimbolos& table){
             }
         }
     }
-    cout << "saiu geração" << endl;
 }
 
 void Analisa_et_variaveis(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table, int &rotulo)
@@ -496,7 +492,6 @@ void AnalisaVariaveis(Token &token, ifstream &codigo_fonte, string &lista_erros,
                 }      
         } else {
             // Erro de esperar um identificador <analisa_variaveis>
-            cout << "AnalisaVariaveis 2" << endl;
             writeErrors(token.linha, codigo_fonte, lista_erros,erroIdentificador);
         }
     } while (token.simbolo != "sdoispontos");
@@ -512,9 +507,7 @@ void Analisa_declaracao_procedimento(Token &token, ifstream &codigo_fonte, strin
     if (token.simbolo == "sidentificador")
     {
         if (!table.pesquisa_declprocfunc_tabela(token.lexema)) {
-            cout << "EMPILHANDO "<< token.lexema << " COMO PROCEDIMENTO!!!! :DDDDDDDDDDDDDDDDDDDD" << endl;
             table.insertAtHead(token.lexema, "procedimento", true, -1 ,rotulo);
-            cout << "GERANULL1 " << rotulo << endl;
             geraNULL(rotulo);
             rotulo++;
             token = Lexical(codigo_fonte,table);
@@ -525,7 +518,7 @@ void Analisa_declaracao_procedimento(Token &token, ifstream &codigo_fonte, strin
                 int variaveis_d = table.qt_var_escopo();
                 
                 table.desempilhar_escopo();
-                cout << token.lexema << " declaracao_proc" << endl;
+                // cout << token.lexema << " declaracao_proc" << endl;
                 if (variaveis_d != 0){
                     // counter & backup
                     int c_temp = alocacoes.back();
@@ -540,21 +533,21 @@ void Analisa_declaracao_procedimento(Token &token, ifstream &codigo_fonte, strin
             else
             {
                 // erro de pontuação ponto_virgula
-                cout << "decl_proc" << endl;
+                // cout << "decl_proc" << endl;
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
                 exit(0);
             }
         }
 
         else {
-            cout << "Analisa_declaracao_procedimento" << endl;
+            // cout << "Analisa_declaracao_procedimento" << endl;
             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         }
     }
     else
     {
         // ERRO NAO TEM IDENTIFICADOR
-        cout << "Analisa_declaracao_procedimento" << endl;
+        // cout << "Analisa_declaracao_procedimento" << endl;
         writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         // RETIRAR O GALHO DA TABELA DE SIMBOLOS
     }
@@ -585,7 +578,7 @@ void Analisa_declaracao_funcao(Token &token, ifstream &codigo_fonte, string &lis
 
             table.insertAtHead(token.lexema, "",true , -1, aux_rot);
             
-            cout << "GERANULL2 " << aux_rot << endl;
+            // cout << "GERANULL2 " << aux_rot << endl;
             geraNULL(aux_rot);
 
             token = Lexical(codigo_fonte,table);
@@ -603,7 +596,7 @@ void Analisa_declaracao_funcao(Token &token, ifstream &codigo_fonte, string &lis
                         
                         int variaveis_d = table.qt_var_escopo();
                         table.desempilhar_escopo();
-                        cout << token.lexema << endl;
+                        // cout << token.lexema << endl;
                         if (variaveis_d != 0){
                             // counter & backup
                             int c_temp = alocacoes.back();
@@ -658,7 +651,7 @@ void Analisa_subrotinas(Token &token, ifstream &codigo_fonte, string &lista_erro
             token = Lexical(codigo_fonte,table);
         }
         else {
-            cout << "subrotinas" << endl;
+            // cout << "subrotinas" << endl;
             writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
             exit(0);
         }
@@ -666,7 +659,7 @@ void Analisa_subrotinas(Token &token, ifstream &codigo_fonte, string &lista_erro
     if (flag == 1) {
         // GERA(auxrot,NULL,´ ´,´ ´)
         
-        cout << "GERANULL3 " << auxrot << endl;
+        // cout << "GERANULL3 " << auxrot << endl;
         geraNULL(auxrot);
     }
 }
@@ -683,7 +676,6 @@ void Analisa_atribuicao(Token &token, ifstream &codigo_fonte, string &lista_erro
         lista_expressao.pop_back(); // retirar o ; salvo na lista
         string var_tipo = table.pesquisa_tipo_var_tabela(varpassada);
         string expressao_tipo = analisa_tipo_semantico(table);
-        cout << var_tipo << " SOCORRO CARALHO MEU DEUS!!!!! " << expressao_tipo << endl;
 
         if (expressao_tipo != var_tipo) {
             cout << "Tipo não compatível de expressão atribuída a variável!" << endl;
@@ -984,11 +976,11 @@ void Analisa_se(Token &token, ifstream &codigo_fonte, string &lista_erros, Tabel
             rotulo++;
             token = Lexical(codigo_fonte,table);
             Analisa_comando_simples(token, codigo_fonte, lista_erros,table,rotulo); 
-            cout << "GERANULL6 " << aux_rot1 << endl;
+            // cout << "GERANULL6 " << aux_rot1 << endl;
             geraNULL(aux_rot1);
         }
         else {
-            cout << "GERANULL7 " << aux_rot << endl;
+            // cout << "GERANULL7 " << aux_rot << endl;
             geraNULL(aux_rot);
         }
     }
@@ -1075,13 +1067,13 @@ void Analisa_escreva(Token &token, ifstream &codigo_fonte, string &lista_erros, 
         }
         else
         {
-            cout << "Analisa_escreva" << endl;
+            // cout << "Analisa_escreva" << endl;
             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         }
     }
     else
     {
-        cout << "ha7" << endl;
+        // cout << "ha7" << endl;
         writeErrors(token.linha, codigo_fonte, lista_erros, erroFechamentoDeParenteses);
     }
 }
@@ -1091,7 +1083,7 @@ void Analisa_comando_simples(Token &token, ifstream &codigo_fonte, string &lista
     if (token.simbolo == "sidentificador")
     {
         // TEM QUE OLHAR ESSA FUNÇAO !!!!
-        cout << token.lexema << " ENTRANDO NA ATRIB_CHPROCEDIMENTO" << endl;
+        // cout << token.lexema << " ENTRANDO NA ATRIB_CHPROCEDIMENTO" << endl;
         Analisa_atrib_chprocedimento(token, codigo_fonte, lista_erros,table,rotulo);
     }
     else if (token.simbolo == "sse")
@@ -1126,10 +1118,10 @@ void Analisa_comandos(Token &token, ifstream &codigo_fonte, string &lista_erros,
         Analisa_comando_simples(token, codigo_fonte, lista_erros,table,rotulo);
 
         while (token.simbolo != "sfim") {
-            cout << token.lexema << " dentro do while " << token.simbolo << endl;
+            // cout << token.lexema << " dentro do while " << token.simbolo << endl;
             if (token.simbolo == "sponto_virgula") {
                 token = Lexical(codigo_fonte,table);
-                cout << token.lexema << " dentro do while 2 " << token.simbolo << endl;
+                // cout << token.lexema << " dentro do while 2 " << token.simbolo << endl;
                 if (token.simbolo != "sfim") {
                     if (token.simbolo != "sponto"){
                     } else {
@@ -1140,17 +1132,17 @@ void Analisa_comandos(Token &token, ifstream &codigo_fonte, string &lista_erros,
                 }
             }
             else {
-                cout << "analisa_comandos" << endl;
-                cout << token.lexema << " " << token.simbolo << endl;
+                // cout << "analisa_comandos" << endl;
+                // cout << token.lexema << " " << token.simbolo << endl;
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
                 exit(0);
                 break;
             }
         }
-        cout << "eh" << endl;
-        cout << token.lexema << " final? " << token.simbolo << endl;
+        // cout << "eh" << endl;
+        // cout << token.lexema << " final? " << token.simbolo << endl;
         token = Lexical(codigo_fonte,table);
-        cout << token.lexema << " dentro do while " << token.simbolo << endl;
+        // cout << token.lexema << " dentro do while " << token.simbolo << endl;
     }
     else {
         writeErrors(token.linha, codigo_fonte, lista_erros, erroInicio);
@@ -1184,7 +1176,7 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
                 
                 if (token.simbolo == "sponto")
                 {
-                    cout << "COMPILAMOS PORR" << endl;
+                    cout << "Compilado com sucesso!" << endl;
                     if (!alocacoes.empty()) {
                     int c_temp = alocacoes.back();
                     alocacoes.pop_back();
@@ -1199,15 +1191,15 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
                 else
                 {
                     // Erro de ponto final <programa>
-                    cout << "sdfujibghnwdf8iougberg" << endl;
-                    cout << token.lexema << " " << token.simbolo << endl;
+                    // cout << "sdfujibghnwdf8iougberg" << endl;
+                    // cout << token.lexema << " " << token.simbolo << endl;
                     writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoFinal);
                 }
             }
             else
             {
                 // Erro de ponto-virgula <programa>
-                cout << "main" << endl;
+                // cout << "main" << endl;
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
                 exit(0);
             }
@@ -1215,7 +1207,7 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
         else
         {
             // Erro do identificador <programa>
-            cout << "main" << endl;
+            // cout << "main" << endl;
             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificadorPrograma);
         }
     }

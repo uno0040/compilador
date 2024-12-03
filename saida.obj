@@ -1,0 +1,15 @@
+    START
+    ALLOC   0   1
+    ALLOC   1   1
+    LDC     1
+    STR     1
+    LDC     1
+    NEG
+    NEG
+    JMPF    1
+    LDV     1
+    PRN
+1   NULL
+    DALLOC  1   1
+    DALLOC  0   1
+    HLT
