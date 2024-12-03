@@ -931,10 +931,10 @@ void Analisa_enquanto(Token &token, ifstream &codigo_fonte, string &lista_erros,
     auxrot1 = rotulo;
     //gera(rotulo,NULL,"    ","    ") // inicio do while
     
-    // cout << "GERANULL4 " << rotulo << endl;
     geraNULL(rotulo);
     rotulo++;
 
+    // o bloco englobado pelos dois save abaixo armazena os dados na tabela de simbolos para analise
     save = true;
     lista_expressao.push_back(token.lexema);
     // token = Lexical(codigo_fonte,table);
@@ -975,12 +975,12 @@ void Analisa_enquanto(Token &token, ifstream &codigo_fonte, string &lista_erros,
 
 void Analisa_se(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table, int &rotulo)
 {
-    // cout << "bem vindo ao Analisa_se" << endl;
     token = Lexical(codigo_fonte,table);
-    int aux_rot = rotulo;
+    int aux_rot = rotulo; 
     rotulo++;
-    int aux_rot1;
+    int aux_rot1; // cria um novo rotulo para este se
     
+    // o bloco englobado pelos dois save abaixo armazena os dados na tabela de simbolos para analise
     save = true;
     lista_expressao.push_back(token.lexema);
 
@@ -989,34 +989,34 @@ void Analisa_se(Token &token, ifstream &codigo_fonte, string &lista_erros, Tabel
     save = false;
     lista_expressao.pop_back(); //remove ;
 
-    string tipo = analisa_tipo_semantico(table);
+    string tipo = analisa_tipo_semantico(table); // coleta o tipo da expressao na tabela
 
     if (tipo != "sbooleano") {
         cerr << "Esperava-se tipo booleano." << endl;
         exit(-1);
     }
 
-    gerar_expressao(table);
-    geraJMPF(aux_rot);
+    gerar_expressao(table); // gera a expressao pos fixa e gera seus comandos
+    geraJMPF(aux_rot); // gera um jump para o rotulo do se
 
 
-    if (token.simbolo == "sentao") {
+    if (token.simbolo == "sentao") { 
         token = Lexical(codigo_fonte,table);
         Analisa_comando_simples(token, codigo_fonte, lista_erros,table,rotulo);
         if (token.simbolo == "ssenao") {
-            aux_rot1 = rotulo;
+            aux_rot1 = rotulo; // se tiver senao, ele aloca um rotulo para ele
             rotulo++;
             token = Lexical(codigo_fonte,table);
             Analisa_comando_simples(token, codigo_fonte, lista_erros,table,rotulo); 
-            // cout << "GERANULL6 " << aux_rot1 << endl;
-            geraNULL(aux_rot1);
+            geraNULL(aux_rot1); // gera o NULL para o comando senao
         }
         else {
-            // cout << "GERANULL7 " << aux_rot << endl;
-            geraNULL(aux_rot);
+            geraNULL(aux_rot); // gera apenas o comando NULL para o comando se
         }
     }
     else {
+        cerr << "Esperava-se entao." << endl;
+        exit(-1);
         writeErrors(token.linha, codigo_fonte, lista_erros, erroEsperaEntao);
     }
 }
@@ -1025,7 +1025,7 @@ void Analisa_se(Token &token, ifstream &codigo_fonte, string &lista_erros, Tabel
 // arrumei c:
 void Analisa_leia(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table, int &rotulo)
 {
-    string aux;
+    string aux; // variavel auxiliar
     token = Lexical(codigo_fonte,table);
     if (token.simbolo == "sabre_parenteses") {
         token = Lexical(codigo_fonte,table);
@@ -1035,11 +1035,11 @@ void Analisa_leia(Token &token, ifstream &codigo_fonte, string &lista_erros, Tab
             // busca em toda a tabela pela variavel, se nao achar ele da erro.
             if (flag){
                 if (table.pesquisa_tipo_var_tabela(token.lexema) == "sinteiro") {
-                    aux = token.lexema;
+                    aux = token.lexema; // coloca o nome da variavel no aux
                     token = Lexical(codigo_fonte,table);
                     if (token.simbolo == "sfecha_parenteses") {
-                        geraRD();
-                        geraSTR(table.locEndMemoria(aux));
+                        geraRD(); // gera o RD
+                        geraSTR(table.locEndMemoria(aux)); // busca o endereço da variável na tabela e gera o STR para esta variavel
                         token = Lexical(codigo_fonte,table);
                     }
                 } else {
@@ -1070,7 +1070,7 @@ void Analisa_leia(Token &token, ifstream &codigo_fonte, string &lista_erros, Tab
 // me checar ?
 void Analisa_escreva(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table, int &rotulo)
 {
-    string aux;
+    string aux;  // usado para guardar a variavel
     token = Lexical(codigo_fonte,table);
     if (token.simbolo == "sabre_parenteses")
     {
@@ -1078,20 +1078,25 @@ void Analisa_escreva(Token &token, ifstream &codigo_fonte, string &lista_erros, 
         if (token.simbolo == "sidentificador")
         {
             
-            bool existe = table.pesquisa_declvarfunc_tabela(token.lexema);
+            bool existe = table.pesquisa_declvarfunc_tabela(token.lexema); // verifica se a variavel existe
 
             if (existe)
             {
                 if (table.pesquisa_tipo_var_tabela(token.lexema) == "sinteiro") {
-                    aux = token.lexema;
+                    aux = token.lexema; // guarda o nome da variavel após confirmar se tipo e que ela existe
+                }
+                else {
+                    cerr << "Escreva espera uma variável do tipo inteiro." << endl;
+                    exit(-1);   
+                    writeErrors(token.linha, codigo_fonte, lista_erros, erroFechamentoDeParenteses);
                 }
                 token = Lexical(codigo_fonte,table);
 
-                if (token.simbolo == "sfecha_parenteses")
+                if (token.simbolo == "sfecha_parenteses") // se a sintaxe estiver certa
                 {
                     token = Lexical(codigo_fonte,table);
-                    geraLDV(table.locEndMemoria(aux));
-                    geraPRN();
+                    geraLDV(table.locEndMemoria(aux)); // gera o LDV do endereço da variável
+                    geraPRN(); // gera PRN
                 }
                 else
                 {   
@@ -1109,7 +1114,6 @@ void Analisa_escreva(Token &token, ifstream &codigo_fonte, string &lista_erros, 
         }
         else
         {
-            // cout << "Analisa_escreva" << endl;
             cerr << "Esperava-se identificador." << endl;
             exit(-1);
             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
@@ -1117,7 +1121,6 @@ void Analisa_escreva(Token &token, ifstream &codigo_fonte, string &lista_erros, 
     }
     else
     {
-        // cout << "ha7" << endl;
         cerr << "Parênteses não balanceados." << endl;
         exit(-1);
         writeErrors(token.linha, codigo_fonte, lista_erros, erroFechamentoDeParenteses);
@@ -1125,11 +1128,8 @@ void Analisa_escreva(Token &token, ifstream &codigo_fonte, string &lista_erros, 
 }
 void Analisa_comando_simples(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table, int &rotulo)
 {
-    // cout << "bem vindo ao Analisa_comando_simples" << endl;
     if (token.simbolo == "sidentificador")
     {
-        // TEM QUE OLHAR ESSA FUNÇAO !!!!
-        // cout << token.lexema << " ENTRANDO NA ATRIB_CHPROCEDIMENTO" << endl;
         Analisa_atrib_chprocedimento(token, codigo_fonte, lista_erros,table,rotulo);
     }
     else if (token.simbolo == "sse")
@@ -1154,9 +1154,9 @@ void Analisa_comando_simples(Token &token, ifstream &codigo_fonte, string &lista
     }
 }
 
+
 void Analisa_comandos(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table, int &rotulo)
 {
-    // cout << "bem vindo ao Analisa_comandos" << endl;
     if (token.simbolo == "sinicio")
     {
         token = Lexical(codigo_fonte,table);
@@ -1164,10 +1164,8 @@ void Analisa_comandos(Token &token, ifstream &codigo_fonte, string &lista_erros,
         Analisa_comando_simples(token, codigo_fonte, lista_erros,table,rotulo);
 
         while (token.simbolo != "sfim") {
-            // cout << token.lexema << " dentro do while " << token.simbolo << endl;
             if (token.simbolo == "sponto_virgula") {
                 token = Lexical(codigo_fonte,table);
-                // cout << token.lexema << " dentro do while 2 " << token.simbolo << endl;
                 if (token.simbolo != "sfim") {
                     if (token.simbolo != "sponto"){
                     } else {
@@ -1178,18 +1176,13 @@ void Analisa_comandos(Token &token, ifstream &codigo_fonte, string &lista_erros,
                 }
             }
             else {
-                // cout << "analisa_comandos" << endl;
-                // cout << token.lexema << " " << token.simbolo << endl;
                 cerr << "Esperava-se ponto e vírgula." << endl;
                 exit(-1);
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
                 break;
             }
         }
-        // cout << "eh" << endl;
-        // cout << token.lexema << " final? " << token.simbolo << endl;
         token = Lexical(codigo_fonte,table);
-        // cout << token.lexema << " dentro do while " << token.simbolo << endl;
     }
     else {
         cerr << "Esperava-se início." << endl;
@@ -1201,11 +1194,21 @@ void Analisa_comandos(Token &token, ifstream &codigo_fonte, string &lista_erros,
 void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
 {
     string lista_erros = "lista_erros.txt";
-    int rotulo = 0;
+    int rotulo = 0; // rótulo utilizado para referenciar funções
+
+    // COMO FUNCIONA A TABELA DE SÍMBOLOS?
+    // Ela possui 5 campos:
+    // string data => nome do objeto
+    // string tipo => tipo do objeto (ex. "funcao booleana", "sinteiro", "nomedoprograma")
+    // bool escopo => equivalente de marcar um galho, quando marcado como true, marca um novo escopo. Utilizado para desempilhar escopos.
+    // int mem => lugar aonde a variável está alocada, utilizado para referenciar variáveis. Sempre aloca de maneira crescente, alocando de 1 para cima. 0 é reservado para retorno de função
+    // int rotulo => rótulo atribuído à função, começa em 0 e vai incrementando.
+    // há valores padrões, 'escopo' quando não for relevante é false, 'mem' quando não for relevante é -1 e 'rótulo' quando não for relevante também é -1.
     
     Token token = Lexical(codigo_fonte,table);
     if (token.simbolo == "sprograma")
     {
+        // gera os START e ALLOC 0 1 ambiguos para todos os programas
         geraSTART();
         geraALLOC(0,1);
 
@@ -1214,8 +1217,8 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
         {
 
             // COLOCAR O NOME DO PROGRAMA NA TABELA DE SIMBOLOS :D
-            
-            table.insertAtHead(token.lexema, "nomedeprograma", false, -1, rotulo); // CHECAR AQUI
+            // insere o nome do programa na tabela de símbolos
+            table.insertAtHead(token.lexema, "nomedeprograma", false, -1, rotulo);
             rotulo++;
             token = Lexical(codigo_fonte,table);
             
@@ -1225,7 +1228,12 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
                 
                 if (token.simbolo == "sponto")
                 {
+                    // Compilado com sucesso! Após detectar o ponto final.
                     cout << "Compilado com sucesso!" << endl;
+
+                    // Esvazia o vetor de alocacoes
+                    // Toda vez que uma alocação é feita (ALLOC) ele adiciona os valores neste vetor
+                    // Este código abaixo realiza o DALLOC da primeira alocação feita no programa
                     if (!alocacoes.empty()) {
                     int c_temp = alocacoes.back();
                     alocacoes.pop_back();
@@ -1234,14 +1242,12 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
                     geraDALLOC(b_temp,c_temp);
                     }
                     
+                    // gera o DALLOC e o HLT ambiguos para todos os programas
                     geraDALLOC(0,1);
                     geraHLT();
                 }
                 else
                 {
-                    // Erro de ponto final <programa>
-                    // cout << "sdfujibghnwdf8iougberg" << endl;
-                    // cout << token.lexema << " " << token.simbolo << endl;
                     cerr << "Esperava-se ponto final." << endl;
                     exit(-1);
                     writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoFinal);
@@ -1249,8 +1255,6 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
             }
             else
             {
-                // Erro de ponto-virgula <programa>
-                // cout << "main" << endl;
                 cerr << "Esperava-se ponto e vírgula." << endl;
                 exit(-1);
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
@@ -1259,8 +1263,6 @@ void analisadorSintatico(ifstream &codigo_fonte, TabelaDeSimbolos& table)
         }
         else
         {
-            // Erro do identificador <programa>
-            // cout << "main" << endl;
             cerr << "Esperava-se identificador programa." << endl;
             exit(-1);
             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificadorPrograma);
