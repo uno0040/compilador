@@ -132,7 +132,8 @@ vector<string> conversao_posfixa() {
                 pilha.pop();
             }
             else {
-                // ERRO PARENTESES
+                cerr << "Parenteses não balanceados." << endl;
+                exit(-1);
             }
 
             // Após fechar parênteses, verificar por operadores unários
@@ -155,14 +156,16 @@ vector<string> conversao_posfixa() {
             }
         }
         else {
-            // ERRO TOKEN DESCONHECIDO
+            cerr << "Token desconhecido." << endl;
+            exit(-1);
         }
     }
 
     // Após processar todos os tokens, desempilha os operadores restantes
     while (!pilha.empty()) {
         if (pilha.top() == "(" || pilha.top() == ")") {
-            // ERRO PARENTESES NAO BALANCEADOS
+            cerr << "Parenteses não balanceados." << endl;
+            exit(-1);
         }
         saida.push_back(pilha.top());
         pilha.pop();
