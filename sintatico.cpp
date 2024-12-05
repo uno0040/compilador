@@ -408,8 +408,8 @@ void Analisa_et_variaveis(Token &token, ifstream &codigo_fonte, string &lista_er
                 {
                     // erro de ponto e virgula <etapa de declaração de variaveis>
                     cerr << "Erro de ponto e virgula" << endl;
+                    exit(-1);
                     writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
-                    exit(0);
                 }
 
             } while (token.simbolo == "sidentificador");
@@ -548,6 +548,7 @@ void Analisa_declaracao_procedimento(Token &token, ifstream &codigo_fonte, strin
             else
             {
                 cerr << "Esperava-se ponto e vírgula." << endl;
+                exit(-1);
                 writeErrors(token.linha, codigo_fonte, lista_erros, erroPontoeVirgula);
                 exit(0);
             }
@@ -555,12 +556,14 @@ void Analisa_declaracao_procedimento(Token &token, ifstream &codigo_fonte, strin
 
         else {
             cerr << "Erro de identificador." << endl;
+            exit(-1);
             writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
         }
     }
     else
     {
         cerr << "Esperava-se identificador." << endl;
+        exit(-1);
         writeErrors(token.linha, codigo_fonte, lista_erros, erroIdentificador);
     }
 }
@@ -845,6 +848,8 @@ void Analisa_expressao(Token &token, ifstream &codigo_fonte, string &lista_erros
 void Analisa_chamada_procedimento(Token &token, ifstream &codigo_fonte, string &lista_erros, TabelaDeSimbolos& table, int &rotulo) {
     token = Lexical(codigo_fonte,table);
     if (token.simbolo != "sidentificador") {
+        cerr << "Esperava-se identificador para procedimento." << endl;
+        exit(-1);
         writeErrors(token.linha, codigo_fonte, lista_erros, erroChamadaProcedimento);
     } else {
         Analisa_identificador(token, codigo_fonte, lista_erros,table,rotulo);
